@@ -590,6 +590,7 @@
                 <div class="card-header">
                     <h2 class="card-title">Today's Sales</h2>
                     <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-sm btn-outline" id="settingsBtn">⚙️</button>
                         <button class="btn btn-sm btn-outline" id="exportBtn">📤 Export</button>
                         <button class="btn btn-sm btn-outline"
                             style="color: var(--danger); border-color: var(--danger);" id="resetBtn">Reset</button>
@@ -626,7 +627,8 @@
                 sales: JSON.parse(localStorage.getItem('pos_sales') || '[]'),
                 drafts: JSON.parse(localStorage.getItem('pos_drafts') || '[]'),
                 inventory: typeof inventory !== 'undefined' ? inventory : [], // Inventory injected above
-                lastId: parseInt(localStorage.getItem('pos_last_id') || '0')
+                lastId: parseInt(localStorage.getItem('pos_last_id') || '0'),
+                deviceId: localStorage.getItem('pos_device_id') || 'POS1'
             };
 
             // --- DOM ELEMENTS ---
@@ -654,8 +656,10 @@
                 salesList: document.getElementById('salesList'),
                 totalCount: document.getElementById('totalCount'),
                 totalRevenue: document.getElementById('totalRevenue'),
+                totalRevenue: document.getElementById('totalRevenue'),
                 exportBtn: document.getElementById('exportBtn'),
                 resetBtn: document.getElementById('resetBtn'),
+                settingsBtn: document.getElementById('settingsBtn'),
                 toast: document.getElementById('toast'),
                 installPrompt: document.getElementById('installPrompt'),
                 modeToggleBtn: document.getElementById('modeToggleBtn'),
@@ -1001,7 +1005,7 @@
                 });
 
                 const sale = {
-                    id: ++STATE.lastId,
+                    id: `${STATE.deviceId}-${++STATE.lastId}`,
                     timestamp: new Date().toISOString(),
                     items: finalItems,
                     total: finalTotal,
@@ -1104,6 +1108,15 @@
                     localStorage.removeItem('pos_sales');
                     localStorage.removeItem('pos_last_id');
                     renderSales();
+                }
+            });
+
+            UI.settingsBtn.addEventListener('click', () => {
+                const newId = prompt('Enter Device ID (e.g. A, B, POS1):', STATE.deviceId);
+                if (newId && newId.trim() !== '') {
+                    STATE.deviceId = newId.trim();
+                    localStorage.setItem('pos_device_id', STATE.deviceId);
+                    showToast(`Device ID set to: ${STATE.deviceId}`);
                 }
             });
 
