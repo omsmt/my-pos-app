@@ -1057,6 +1057,13 @@
                                 <span>$${item.actualPrice.toFixed(2)}</span>
                             </div>
                         `).join('')}
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ccc; display: flex; align-items: center; justify-content: space-between;">
+                            <span>Payment: <strong>${sale.paymentMethod.toUpperCase()}</strong></span>
+                            <div>
+                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment(${sale.id}, 'cash')">Cash</button>
+                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment(${sale.id}, 'payid')">PayID</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `).join('');
@@ -1075,6 +1082,18 @@
                     localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
                     renderSales();
                     showToast('Sale deleted');
+                }
+            };
+
+            window.updateSalePayment = function (id, newMethod) {
+                const sale = STATE.sales.find(s => s.id === id);
+                if (sale && sale.paymentMethod !== newMethod) {
+                    if (confirm(`Change payment method to ${newMethod.toUpperCase()}?`)) {
+                        sale.paymentMethod = newMethod;
+                        localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
+                        renderSales();
+                        showToast('Payment updated');
+                    }
                 }
             };
 
@@ -1120,6 +1139,7 @@
                 const now = new Date();
                 const dateStr = now.toISOString().split('T')[0];
                 const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-').substring(0, 5); // HH-MM
+                const csvContent = rows.join('\n');
                 const fileName = `sales_export_${dateStr}_${timeStr}.csv`;
                 const file = new File([csvContent], fileName, { type: 'text/csv' });
 
