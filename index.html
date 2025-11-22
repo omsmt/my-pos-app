@@ -1053,7 +1053,7 @@
                     <div id="sale-details-${sale.id}" style="display: none; background: #f9fafb; padding: 10px; font-size: 13px;">
                         ${sale.items.map(item => `
                             <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <span>${item.quantity}x ${item.description}</span>
+                                <span>${item.quantity}x <span style="color: #666; font-size: 0.9em;">[${item.sku}]</span> ${item.description}</span>
                                 <span>$${item.actualPrice.toFixed(2)}</span>
                             </div>
                         `).join('')}
