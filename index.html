@@ -505,7 +505,9 @@
                     </div>
                     <div class="preview-row">
                         <span class="preview-label">Price</span>
-                        <span class="preview-value" id="previewCost">-</span>
+                        <input type="number" id="previewCostInput" class="search-input"
+                            style="width: 100px; padding: 4px 8px; font-size: 14px;" placeholder="0.00"
+                            inputmode="decimal">
                     </div>
                 </div>
 
@@ -639,7 +641,7 @@
                 itemPreview: document.getElementById('itemPreview'),
                 previewDesc: document.getElementById('previewDesc'),
                 previewCat: document.getElementById('previewCat'),
-                previewCost: document.getElementById('previewCost'),
+                previewCostInput: document.getElementById('previewCostInput'),
                 quantity: document.getElementById('quantity'),
                 addToCartBtn: document.getElementById('addToCartBtn'),
                 cartSection: document.getElementById('cartSection'),
@@ -745,7 +747,7 @@
                 if (selectedItem) {
                     UI.previewDesc.textContent = selectedItem.description;
                     UI.previewCat.textContent = selectedItem.category;
-                    UI.previewCost.textContent = `$${selectedItem.price.toFixed(2)}`;
+                    UI.previewCostInput.value = selectedItem.price.toFixed(2);
                     UI.itemPreview.classList.add('visible');
                     UI.addToCartBtn.disabled = false;
                 }
@@ -804,7 +806,10 @@
                     const desc = UI.manualDesc.value.trim();
                     const price = parseFloat(UI.manualPrice.value);
 
-                    if (!desc || isNaN(price)) return;
+                    if (!desc || isNaN(price) || price < 0) {
+                        alert('Please enter a valid description and price for manual item.');
+                        return;
+                    }
 
                     itemToAdd = {
                         sku: 'MANUAL',
@@ -816,15 +821,18 @@
                     };
                 } else {
                     if (!selectedItem) return;
-                    const suggestedPrice = selectedItem.price;
-
+                    const editedPrice = parseFloat(UI.previewCostInput.value);
+                    if (isNaN(editedPrice) || editedPrice < 0) {
+                        alert('Please enter a valid price for the selected item.');
+                        return;
+                    }
                     itemToAdd = {
                         sku: selectedItem.sku,
                         description: selectedItem.description,
                         category: selectedItem.category,
                         quantity: qty,
-                        unitPrice: suggestedPrice,
-                        lineTotal: suggestedPrice * qty
+                        unitPrice: editedPrice,
+                        lineTotal: editedPrice * qty
                     };
                 }
 
