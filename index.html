@@ -1034,19 +1034,49 @@
                 }
 
                 UI.salesList.innerHTML = STATE.sales.map(sale => `
-                <div class="sale-record">
-                    <div class="sale-info">
-                        <h4>#${sale.id} • ${sale.items.length} Items</h4>
-                        <div class="sale-meta">
-                            ${new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • 
-                            ${sale.paymentMethod.toUpperCase()}
-                            ${sale.isDeal ? '• DEAL' : ''}
+                <div class="sale-record-wrapper" style="border-bottom: 1px solid var(--border);">
+                    <div class="sale-record">
+                        <div class="sale-info">
+                            <h4>#${sale.id} • ${sale.items.length} Items</h4>
+                            <div class="sale-meta">
+                                ${new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • 
+                                ${sale.paymentMethod.toUpperCase()}
+                                ${sale.isDeal ? '• DEAL' : ''}
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="sale-amount">$${sale.total.toFixed(2)}</div>
+                            <button class="btn btn-sm btn-outline" onclick="toggleSaleDetails(${sale.id})">View</button>
+                            <button class="cart-remove" onclick="deleteSale(${sale.id})">×</button>
                         </div>
                     </div>
-                    <div class="sale-amount">$${sale.total.toFixed(2)}</div>
+                    <div id="sale-details-${sale.id}" style="display: none; background: #f9fafb; padding: 10px; font-size: 13px;">
+                        ${sale.items.map(item => `
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span>${item.quantity}x ${item.description}</span>
+                                <span>$${item.actualPrice.toFixed(2)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
             `).join('');
             }
+
+            window.toggleSaleDetails = function (id) {
+                const el = document.getElementById(`sale-details-${id}`);
+                if (el) {
+                    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+                }
+            };
+
+            window.deleteSale = function (id) {
+                if (confirm(`Delete Sale #${id}?\nThis cannot be undone.`)) {
+                    STATE.sales = STATE.sales.filter(s => s.id !== id);
+                    localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
+                    renderSales();
+                    showToast('Sale deleted');
+                }
+            };
 
             UI.resetBtn.addEventListener('click', () => {
                 if (confirm('⚠️ DELETE ALL SALES HISTORY?\nThis cannot be undone.')) {
@@ -1087,8 +1117,10 @@
                     });
                 });
 
-                const csvContent = rows.join('\n');
-                const fileName = `sales_export_${new Date().toISOString().split('T')[0]}.csv`;
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0];
+                const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-').substring(0, 5); // HH-MM
+                const fileName = `sales_export_${dateStr}_${timeStr}.csv`;
                 const file = new File([csvContent], fileName, { type: 'text/csv' });
 
                 // Try Web Share API first (Best for iOS)
