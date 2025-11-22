@@ -862,7 +862,14 @@
                 <div class="cart-item">
                     <div class="cart-item-details">
                         <div class="cart-item-title">${item.description}</div>
-                        <div class="cart-item-meta">${item.sku} • ${item.quantity} × $${item.unitPrice.toFixed(2)}</div>
+                        <div class="cart-item-meta">
+                            ${item.sku} • ${item.quantity} × 
+                            $<input type="number" 
+                                    value="${item.unitPrice.toFixed(2)}" 
+                                    onchange="updateCartPrice(${idx}, this.value)"
+                                    onclick="this.select()"
+                                    style="width: 70px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;">
+                        </div>
                     </div>
                     <div class="cart-item-price">$${item.lineTotal.toFixed(2)}</div>
                     <button class="cart-remove" onclick="removeFromCart(${idx})">×</button>
@@ -874,6 +881,19 @@
 
             window.removeFromCart = function (idx) {
                 STATE.cart.splice(idx, 1);
+                saveCart();
+                renderCart();
+            };
+
+            window.updateCartPrice = function (idx, newPrice) {
+                const price = parseFloat(newPrice);
+                if (isNaN(price) || price < 0) {
+                    alert('Invalid price');
+                    renderCart(); // Reset to old value
+                    return;
+                }
+                STATE.cart[idx].unitPrice = price;
+                STATE.cart[idx].lineTotal = price * STATE.cart[idx].quantity;
                 saveCart();
                 renderCart();
             };
