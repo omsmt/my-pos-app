@@ -1050,8 +1050,8 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <div class="sale-amount">$${sale.total.toFixed(2)}</div>
-                            <button class="btn btn-sm btn-outline" onclick="toggleSaleDetails(${sale.id})">View</button>
-                            <button class="cart-remove" onclick="deleteSale(${sale.id})">×</button>
+                            <button class="btn btn-sm btn-outline" onclick="toggleSaleDetails('${sale.id}')">View</button>
+                            <button class="cart-remove" onclick="deleteSale('${sale.id}')">×</button>
                         </div>
                     </div>
                     <div id="sale-details-${sale.id}" style="display: none; background: #f9fafb; padding: 10px; font-size: 13px;">
@@ -1064,8 +1064,8 @@
                         <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ccc; display: flex; align-items: center; justify-content: space-between;">
                             <span>Payment: <strong>${sale.paymentMethod.toUpperCase()}</strong></span>
                             <div>
-                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment(${sale.id}, 'cash')">Cash</button>
-                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment(${sale.id}, 'payid')">PayID</button>
+                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment('${sale.id}', 'cash')">Cash</button>
+                                <button class="btn btn-sm btn-outline" style="font-size: 12px; padding: 4px 8px;" onclick="updateSalePayment('${sale.id}', 'payid')">PayID</button>
                             </div>
                         </div>
                     </div>
@@ -1082,7 +1082,7 @@
 
             window.deleteSale = function (id) {
                 if (confirm(`Delete Sale #${id}?\nThis cannot be undone.`)) {
-                    STATE.sales = STATE.sales.filter(s => s.id !== id);
+                    STATE.sales = STATE.sales.filter(s => s.id != id);
                     localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
                     renderSales();
                     showToast('Sale deleted');
@@ -1090,7 +1090,7 @@
             };
 
             window.updateSalePayment = function (id, newMethod) {
-                const sale = STATE.sales.find(s => s.id === id);
+                const sale = STATE.sales.find(s => s.id == id);
                 if (sale && sale.paymentMethod !== newMethod) {
                     if (confirm(`Change payment method to ${newMethod.toUpperCase()}?`)) {
                         sale.paymentMethod = newMethod;
