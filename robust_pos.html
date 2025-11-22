@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#667eea">
+    <title>Convention POS</title>
+    <link rel="apple-touch-icon"
+        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+    <style>
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-top: max(20px, var(--safe-top));
+            padding-bottom: max(20px, var(--safe-bottom));
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+            /* Space for fixed bottom bar if needed */
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 10px 0;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .status-bar {
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            display: inline-block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fff;
+            color: var(--text);
+            transition: border-color 0.2s;
+            appearance: none;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Custom Search Input */
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .search-input {
+            padding-left: 40px;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #e5e7eb;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-light);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .search-clear.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-light);
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: auto;
+        }
+
+        /* Item Details */
+        .item-preview {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        .item-preview.visible {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .preview-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-label {
+            color: var(--text-light);
+        }
+
+        .preview-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Cart */
+        .cart-list {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-meta {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            font-size: 16px;
+            margin: 0 12px;
+        }
+
+        .cart-remove {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #fee2e2;
+            color: var(--danger);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .cart-summary {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        /* Payment Methods */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: #eef2ff;
+            color: var(--primary);
+        }
+
+        /* Sales History */
+        .sales-list {
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sale-record {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sale-record:last-child {
+            border-bottom: none;
+        }
+
+        .sale-info h4 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .sale-meta {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .sale-amount {
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Install Prompt */
+        .install-prompt {
+            background: #fff;
+            border: 1px solid var(--primary);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>🛒 Convention POS</h1>
+            <div class="status-bar">
+                <span><span class="status-dot"></span> Offline Ready</span>
+                <span id="version">v2.0</span>
+            </div>
+        </header>
+
+        <div class="install-prompt" id="installPrompt">
+            <h3>📱 Install App</h3>
+            <p style="font-size: 14px; color: #666; margin: 8px 0;">
+                For the best offline experience on iPhone:
+                <br>1. Tap the <strong>Share</strong> button below
+                <br>2. Select <strong>"Add to Home Screen"</strong>
+            </p>
+        </div>
+
+        <!-- New Sale Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">New Item</h2>
+                <button class="btn btn-sm btn-outline" id="modeToggleBtn">Switch to Manual</button>
+            </div>
+
+            <div id="searchMode">
+
+                <div class="form-group">
+                    <label>Search Item</label>
+                    <div class="search-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="skuSearch" class="search-input" placeholder="SKU or Name..."
+                            autocomplete="off" inputmode="search">
+                        <button class="search-clear" id="searchClear">✕</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <select id="skuSelect">
+                        <option value="">Select from list...</option>
+                    </select>
+                </div>
+
+                <div class="item-preview" id="itemPreview">
+                    <div class="preview-row">
+                        <span class="preview-label">Description</span>
+                        <span class="preview-value" id="previewDesc">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Category</span>
+                        <span class="preview-value" id="previewCat">-</span>
+                    </div>
+                    <div class="preview-row">
+                        <span class="preview-label">Price</span>
+                        <span class="preview-value" id="previewCost">-</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="manualMode" style="display: none;">
+                <div class="form-group">
+                    <label>Item Description</label>
+                    <input type="text" id="manualDesc" class="search-input" placeholder="e.g. Custom Item">
+                </div>
+                <div class="form-group">
+                    <label>Price</label>
+                    <input type="number" id="manualPrice" class="search-input" placeholder="0.00" inputmode="decimal">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity</label>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline" style="width: 50px;" onclick="adjustQty(-1)">-</button>
+                    <input type="number" id="quantity" value="1" min="1" style="text-align: center;"
+                        inputmode="numeric">
+                    <button class="btn btn-outline" style="width: 50px;" onclick="adjustQty(1)">+</button>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="addToCartBtn" disabled>
+                Add to Cart
+            </button>
+
+            <!-- Cart Section -->
+            <div class="card" id="cartSection" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Current Cart</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-sm btn-outline" id="saveDraftBtn">💾 Save Draft</button>
+                        <button class="btn btn-sm btn-danger" id="clearCartBtn">Clear</button>
+                    </div>
+                </div>
+
+                <div class="cart-list" id="cartList"></div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span id="cartSubtotal">$0.00</span>
+                    </div>
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>Negotiated Deal Price (Optional)</label>
+                        <input type="number" id="dealPrice" placeholder="Enter final total..." inputmode="decimal">
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <div class="payment-grid">
+                        <div class="payment-option" data-method="cash">💵 Cash</div>
+                        <div class="payment-option" data-method="payid">💳 PayID</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" id="checkoutBtn" disabled>
+                    Complete Sale
+                </button>
+
+            </div>
+
+            <!-- Drafts Section -->
+            <div class="card" id="draftsSection" style="display: none;">
+                <div class="card-header">
+                    <h2 class="card-title">Saved Drafts</h2>
+                </div>
+                <div class="cart-list" id="draftsList"></div>
+            </div>
+
+            <!-- History Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Today's Sales</h2>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-sm btn-outline" id="exportBtn">📤 Export</button>
+                        <button class="btn btn-sm btn-outline"
+                            style="color: var(--danger); border-color: var(--danger);" id="resetBtn">Reset</button>
+                    </div>
+                </div>
+
+                <div class="sales-list" id="salesList">
+                    <div style="text-align: center; padding: 20px; color: #999;">No sales today</div>
+                </div>
+
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+                    <div class="summary-row">
+                        <span>Total Transactions</span>
+                        <span id="totalCount" style="font-weight: 600;">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Revenue</span>
+                        <span id="totalRevenue" style="font-weight: 600; color: var(--primary);">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast">Item added to cart</div>
+
+        <script>
+            const inventory = [{ "sku": "A-001", "description": "Eeveelutions Playmat", "category": "Accessories", "cost": 5.186, "price": 15.0 }, { "sku": "A-002", "description": "Gengar Large image Playmat", "category": "Accessories", "cost": 5.377, "price": 15.0 }, { "sku": "A-003", "description": "Itachi Playmat", "category": "Accessories", "cost": 5.99, "price": 15.0 }, { "sku": "A-004", "description": "Pikachu Playmat", "category": "Accessories", "cost": 4.79, "price": 15.0 }, { "sku": "A-005", "description": "Toon Playmat", "category": "Accessories", "cost": 10.99, "price": 35.0 }, { "sku": "DBG-001", "description": "Dragon Ball Fusion World Android 17 Shop Battle Winner Promo PSA 7 Japanese", "category": "Dragon Ball Graded", "cost": 12.51, "price": 20.0 }, { "sku": "DBG-002", "description": "Dragon Ball Fusion World Golden Frieza Alt PSA 8 Japanese", "category": "Dragon Ball Graded", "cost": 13.54, "price": 20.0 }, { "sku": "DBG-003", "description": "Dragon Ball Fusion World SS3 Goku BCGF 23-24 World Tour PSA 9 Japanese", "category": "Dragon Ball Graded", "cost": 12.51, "price": 35.0 }, { "sku": "DBS-001", "description": "Babidi, Bewitching Domination BT13-075 R PRE-RELEASE", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-002", "description": "Basil, Fatal Rampage DB2-111 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-003", "description": "Clan Commander Frieza BT9-004 R Pre-Release", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-004", "description": "Cooler, Effortless Strike BT13-073 SPR", "category": "Dragon Ball Singles", "cost": 5.0, "price": 0 }, { "sku": "DBS-005", "description": "Desperate Measures DB1-040 C Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-006", "description": "Destined Conclusion Piccolo Jr TB2-039 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-007", "description": "Difference of Status BT14-029 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-008", "description": "Dormant Potential Unleashed BT10-088 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-009", "description": "Ferocious Strke SS Son Goku BT10-060 UC Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-010", "description": "Intensive Training Son Goku BT10-066 R Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-011", "description": "Kakarot, Fate is Dawning DB3-127 UC Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-012", "description": "Korin Tower's Secret Medicine DB3-022 R Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-013", "description": "Paikuhan, Saviour from another Time BT12-124 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-014", "description": "Piccolo Jr, Descendant of the King BT12-004 SPR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-015", "description": "Prince of Destruction Vegeta, Prideful Warrior BT11-066 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-016", "description": "Prince of Destruction Vegeta, Prideful Warrior BT11-066 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-017", "description": "Prodigious Absorption Majin Buu BT6-042 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-019", "description": "SDBH BMPS-01 Ultra Instinct Goku", "category": "Dragon Ball Singles", "cost": 3.0, "price": 0 }, { "sku": "DBS-020", "description": "SDBH HGD6-32 SS Kid Goku", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-021", "description": "SDBH PCS13-02 Jiren", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-022", "description": "SDBH PCS15-01 Gold Goku ", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-023", "description": "SDBH PUMS14-10 Beerus", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-024", "description": "SDBH PUMS14-16 Omega Shenron", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-025", "description": "SDBH PUMS14-17 Nova Shenron", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-026", "description": "SDBH PUMS14-32 Future Gohan", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-027", "description": "SDBH PUMS14-33 Piccolo", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-028", "description": "SDBH PUMS5-02 SS4 Gohan", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-029", "description": "SDBH PUMS8-10 Janemba", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-030", "description": "SDBH PUMS8-19 Janemba", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-031", "description": "SDBH PUMS8-21 Hit", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-032", "description": "SDBH PUMS8-26 Super Mira", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-033", "description": "SDBH SBPVJ-02 Trunks ", "category": "Dragon Ball Singles", "cost": 2.0, "price": 0 }, { "sku": "DBS-034", "description": "SDBH SBPVJ-04 Super Fu", "category": "Dragon Ball Singles", "cost": 2.0, "price": 0 }, { "sku": "DBS-035", "description": "SDBH SBPVJ-05 Super 17", "category": "Dragon Ball Singles", "cost": 2.0, "price": 0 }, { "sku": "DBS-036", "description": "SDBH UM11-043 Robelu ", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-037", "description": "SDBH UM9-038 Meta Rildo", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-038", "description": "SDBH-HG1-36 Kid Buu", "category": "Dragon Ball Singles", "cost": 0.1, "price": 0 }, { "sku": "DBS-039", "description": "SS Bardock, Paternal Unison BT10-062 SPR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-040", "description": "SS Son Goku, the Legend Personified BT13-012 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-041", "description": "SS Vegeta, Exploiting Weakness DB1-002 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-042", "description": "SS4 Son Goku, Protector of the Earth BT11-034 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-043", "description": "SS4 Vegeta, Rise of the Super Warrior BT11-052 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-044", "description": "SS4 Vegeta, Ultimate Evolution BT11-032 UC Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-045", "description": "Son Goku, Allies in the Heart BT13-071 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-046", "description": "Son Goku, Eye for an Eye BT12-005 SPR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-047", "description": "Son Goku, Forever in Our Memories BT11-093 R Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-048", "description": "Son Goku, Revenge of the Great Ape P-264 PR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-049", "description": "Son Goku, Unwavering Conviction DB3-116 R Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-050", "description": "Surprise Attack Naturon Shenron P-260 PR WINNER PRIZE", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-051", "description": "Turles, Invader of Earth BT12-070 SR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-052", "description": "Ultra Instinct Goku's Kamehameha BT9-131 IAR Alt ", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-053", "description": "Ultra Instinct Son Goku, the Unstoppable DB1-021 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-054", "description": "Vegeta's Final Flash BT9-133 IAR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-055", "description": "Vegeta, Prideful Transformation BT10-105 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-056", "description": "Vegeta, Ready to Rumble BT11-053 R Alt ", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-057", "description": "Vegeta, Royal Evolution EB1-07 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-058", "description": "Vegeta, Saviour of the Future BT10-041 C Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-059", "description": "Vegeta, Strength of Legends DB2-133 R Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-060", "description": "Vegeta, Unison of Fury EX12-02 EX Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-061", "description": "Vegeta, Villain Turned Protector DB3-126 UC Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-062", "description": "Vegeta, the Lone Prince BT10-088 C Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-063", "description": "Protector of the Planet DB2-159 SR Alt", "category": "Dragon Ball Singles", "cost": 0.48, "price": 0 }, { "sku": "DBS-064", "description": "Goku & King Piccolo ABS-07 Sealed", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-065", "description": "King Piccolo & Goku ABS-08 Sealed", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-066", "description": "The Power of a Super Saiyan BT13-120 SPR", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBS-G1", "description": "Dragon Ball Singles $1 (Generic)", "category": "Dragon Ball Singles", "cost": 0.0, "price": 0 }, { "sku": "DBSE-G1", "description": "Dragon Ball Sealed (Generic)", "category": "Dragon Ball Sealed", "cost": 0.0, "price": 0 }, { "sku": "F-001", "description": "One Piece Chopper GB Bonus Figure", "category": "Figures", "cost": 12.515, "price": 0 }, { "sku": "G-001", "description": "Bakuten Shoot Beyblad GBC Boxed (some damage)", "category": "Games", "cost": 4.64, "price": 0 }, { "sku": "G-002", "description": "Dragon Ball Z Buus Fury Aftermarket", "category": "Games", "cost": 7.46, "price": 0 }, { "sku": "G-003", "description": "Naruto Konaha Senki GBA Boxed (Orochimaru Background Box)", "category": "Games", "cost": 17.34, "price": 0 }, { "sku": "G-004", "description": "Naruto Ninja Council 2 GBA Boxed (Naruto Gaara Box)", "category": "Games", "cost": 17.34, "price": 0 }, { "sku": "G-005", "description": "Naruto Ninja Council GBA Boxed (Blue Box)", "category": "Games", "cost": 17.34, "price": 0 }, { "sku": "G-006", "description": "Navi Pro Baseball GBC Boxed", "category": "Games", "cost": 4.46, "price": 0 }, { "sku": "G-007", "description": "One Piece Birth of Luffy's Dream Pirate Crew GBC (Blue) Cartridge Only", "category": "Games", "cost": 2.696, "price": 0 }, { "sku": "G-008", "description": "One Piece GBA Great Hidden Treasure of the Nanatsu Islands Brand New", "category": "Games", "cost": 12.85, "price": 0 }, { "sku": "G-009", "description": "One Piece Grand Line Dream Adventure Log GBC (Yellow) Boxed", "category": "Games", "cost": 8.62, "price": 0 }, { "sku": "G-010", "description": "One Piece Grand Line Dream Adventure Log GBC (Yellow) Cartridge Only", "category": "Games", "cost": 2.85, "price": 0 }, { "sku": "G-011", "description": "One Piece Unlmited Cruise SP 3DS", "category": "Games", "cost": 2.55, "price": 0 }, { "sku": "G-012", "description": "One Piece Unlmited World R 3DS", "category": "Games", "cost": 2.55, "price": 0 }, { "sku": "G-013", "description": "Pokemon Crystal Aftermarket", "category": "Games", "cost": 5.938, "price": 0 }, { "sku": "G-014", "description": "Pokemon Gold Aftermarket", "category": "Games", "cost": 7.542, "price": 0 }, { "sku": "G-015", "description": "Pokemon Silver Aftermarket", "category": "Games", "cost": 7.542, "price": 0 }, { "sku": "G-016", "description": "Pokemon Stadium 1 N64 Japanese", "category": "Games", "cost": 4.06, "price": 0 }, { "sku": "G-017", "description": "Pokemon Stadium 2 N64 Japanese", "category": "Games", "cost": 4.06, "price": 0 }, { "sku": "G-018", "description": "Pokemon Stadium 3 Gold & Silver N64 Japanese", "category": "Games", "cost": 4.06, "price": 0 }, { "sku": "G-019", "description": "Teke Teke Asmik-Kun World GB Boxed (Clay Blob)", "category": "Games", "cost": 4.46, "price": 0 }, { "sku": "G-020", "description": "Yugioh Duel Monsters 3 GBC Boxed", "category": "Games", "cost": 10.97, "price": 0 }, { "sku": "G-021", "description": "Yugioh Duel Monsters 4 (Obelisk) GBC Cartridge Only", "category": "Games", "cost": 2.543, "price": 0 }, { "sku": "G-022", "description": "Yugioh Duel Monsters GB Cartridge Only", "category": "Games", "cost": 2.543, "price": 0 }, { "sku": "K-001", "description": "Anya Keytag no.46", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-002", "description": "Anya Keytag no.60", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-003", "description": "Anya Keytag no.91", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-004", "description": "Arcanine Keytag no.50", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-005", "description": "Arcanine Lanyard ", "category": "Keytags", "cost": 2.35, "price": 5.0 }, { "sku": "K-006", "description": "Assassination Classroom Keytag no.75", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-007", "description": "Avatar Aang and logo Keytag no.23", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-008", "description": "Bakugo Keytag no.83", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-009", "description": "Black Clover Asta Keytag no.1", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-010", "description": "Blastoise Keytag 7", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-011", "description": "Bulbasaur Keytag 5", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-012", "description": "Charizard Keytag no.3", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-013", "description": "Charizard Lanyard", "category": "Keytags", "cost": 2.35, "price": 5.0 }, { "sku": "K-014", "description": "Charizard Pokeball Keytag no.43", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-015", "description": "Charmander Keytag no.21", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-016", "description": "Death Note Keytag no.24", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-017", "description": "Dragon Ball 4 Star Ball Keyring ", "category": "Keytags", "cost": 1.066, "price": 5.0 }, { "sku": "K-018", "description": "Dragonite Keytag 3", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-019", "description": "Dragonite Keytag no.30", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-020", "description": "Dragonite Keytag no.33", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-021", "description": "Dragonite Line Laynyard", "category": "Keytags", "cost": 2.35, "price": 5.0 }, { "sku": "K-022", "description": "Eevee Keytag no.17", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-023", "description": "Eevee Keytag no.28", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-024", "description": "Eeveelutions Keytag 1", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-025", "description": "Eren Keytag no.39", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-026", "description": "Eren Keytag no.85", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-027", "description": "Espeon Keytag no.36", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-028", "description": "Espeon Keytag no.6", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-029", "description": "Flareon Keytag 1", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-030", "description": "Flareon Keytag no.34", "category": "Keytags", "cost": 1.1973, "price": 5.0 }, { "sku": "K-031", "description": "Flareon Keytag no.42", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-032", "description": "Frieren and Himmel Keytag no.37", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-033", "description": "Fullmetal Alchemist Edward Keytag", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-034", "description": "Gengar Ghost Lanyard", "category": "Keytags", "cost": 1.37, "price": 5.0 }, { "sku": "K-035", "description": "Gengar Line Keytag no.30", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-036", "description": "Giratina Keytag 3", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-037", "description": "Giyu Keytag no.68", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-038", "description": "Glaceon Keytag no.36", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-039", "description": "Glaceon Keytag no.37", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-040", "description": "Greninja Keytag no.4", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-041", "description": "Groudon Keytag 5", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-042", "description": "Gyarados normal and Shiny Keytag no.22", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-043", "description": "Hinata Keytag no.29", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-044", "description": "Hinata Keytag no.77", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-045", "description": "Hunter x Hunter Hisoka Keytag no.3", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-046", "description": "Inosuke Keytag no.12", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-047", "description": "Itadori and Sukana Keytag no.30", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-048", "description": "Jirachi Keytag no.1", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-049", "description": "Jolteon Keytag no.32", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-050", "description": "Jolteon Keytag no.44", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-051", "description": "Kageyama Keytag no.96", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-052", "description": "Kaiba and Blue Eyes Keytag", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-053", "description": "Kyogre Keytag 9", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-054", "description": "Leafeon Keytag no.46", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-055", "description": "Leafeon Keytag no.47", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-056", "description": "Lucario Keytag 13", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-057", "description": "Lucario Keytag no.19", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-058", "description": "Luffy Finger keytag no.8", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-059", "description": "Lugia Keytag no.25", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-060", "description": "Mew Keytag no.31", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-061", "description": "Mewtwo Keytag 10", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-062", "description": "Mewtwo Keytag no.2", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-063", "description": "Midoriya Keytag no.20", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-064", "description": "Miss Kanroji Keytag no.67", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-065", "description": "Nezuko Keytag no.14", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-066", "description": "Nezuko Keytag no.2", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-067", "description": "Nezuko Keytag no.33", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-068", "description": "Pikachu Pokeball Keytag no. 14", "category": "Keytags", "cost": 1.1973, "price": 5.0 }, { "sku": "K-069", "description": "Rayquaza Keytag 6", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-070", "description": "Rayquaza Lanyard", "category": "Keytags", "cost": 2.35, "price": 5.0 }, { "sku": "K-071", "description": "Rayquaza Normal and Shiny Keytag no.20", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-072", "description": "Rengoku Keytag no.1", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-073", "description": "Rengoku Keytag no.4", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-074", "description": "Sataro Gojo JJK Logo Keytag no.4", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-075", "description": "Sataro Gojo Keytag no.19", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-076", "description": "Sataro Gojo Keytag no.3", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-077", "description": "Sataro Gojo Keytag no.48", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-078", "description": "Senku Keytag no.87", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-079", "description": "Shinobu Keytag no.65", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-080", "description": "Shiny Rayquaza Keytag 4", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-081", "description": "Snorlax Keytag 2", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-082", "description": "Snorlax Keytag no.18", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-083", "description": "Squirtle Keytag 2", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-084", "description": "Starter Trio Charizard, Venusaur, Blastoise Keytag no.56", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-085", "description": "Suguru Geto Keytag no.24", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-086", "description": "Sylveon Keytag no.15", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-087", "description": "Sylveon Keytag no.35", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-088", "description": "Sylveon Keytag no.60", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-089", "description": "Tanjiro Keytag no.42", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-090", "description": "Tanjiro Keytag no.6", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-091", "description": "Tanjiro Keytag no.8", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-092", "description": "Team Avatar Keytag no.8", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-093", "description": "Tengen Keytag no.27", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-094", "description": "Todoroki Keytag no.51", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-095", "description": "Tokyo Ghoul Kaneki Keytag no.14", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-096", "description": "Totodile Keytag 6", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-097", "description": "Umbreon Keytag 3", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-098", "description": "Umbreon Keytag no.16", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-099", "description": "Umbreon Keytag no.57", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-100", "description": "Umbreon Lanyard ", "category": "Keytags", "cost": 2.35, "price": 5.0 }, { "sku": "K-101", "description": "Vaporeon Keytag no.10", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-102", "description": "Vaporeon Keytag no.33", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-103", "description": "Yugi and Dark Magician Keytag", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-104", "description": "Zapdos Keytag no.62", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-105", "description": "Zenitsu Keytag no.10", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-106", "description": "Zoro Keytag no.2", "category": "Keytags", "cost": 1.2, "price": 5.0 }, { "sku": "K-107", "description": "Celebi Keytag 1", "category": "Keytags", "cost": 1.099, "price": 5.0 }, { "sku": "K-108", "description": "Rengoku Keytag no.1 DAMAGED", "category": "Keytags", "cost": 1.2, "price": 0 }, { "sku": "NS-001", "description": "Naruto Kayou A Raikage UR NR-UR-001", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-002", "description": "Naruto Kayou A Raikage UR NR-UR-030", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-003", "description": "Naruto Kayou Choji OR NR-OR-049", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-004", "description": "Naruto Kayou Danzo UR NR-UR-078", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-005", "description": "Naruto Kayou Deidara SP NR-SP-042", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-006", "description": "Naruto Kayou Deidera Gold AR NR-AR-013", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-007", "description": "Naruto Kayou Deidera TGR NR-TGR-025", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-008", "description": "Naruto Kayou Gaara Gold AR NR-AR-028", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-009", "description": "Naruto Kayou Gaara TGR NR-TGR-030", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-010", "description": "Naruto Kayou Hiruzen TGR NR-TGR-032", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-011", "description": "Naruto Kayou Ino UR NR-UR-059", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-012", "description": "Naruto Kayou Itachi SSR NR-SSR-049", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-013", "description": "Naruto Kayou Itachi TGR NR-TGR-012", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-014", "description": "Naruto Kayou Itachi TGR NR-TGR-028", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-015", "description": "Naruto Kayou Kakashi TGR NR-TGR-006", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-016", "description": "Naruto Kayou Kakashi TGR NR-TGR-026", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-017", "description": "Naruto Kayou Kiba TGR NR-TGR-017", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-018", "description": "Naruto Kayou Kiba UR NR-UR-048", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-019", "description": "Naruto Kayou Kiba UR NR-UR-072", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-020", "description": "Naruto Kayou Kisame Silver AR NR-AR-006", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-021", "description": "Naruto Kayou Lee TGR NR-TGR-004", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-022", "description": "Naruto Kayou Madara TGR NR-TGR-029", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-023", "description": "Naruto Kayou Mei Terum\u012b UR NR-UR-003", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-024", "description": "Naruto Kayou Might Guy UR NR-UR-020", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-025", "description": "Naruto Kayou Naruto Sage Gold AR NR-AR-030", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-026", "description": "Naruto Kayou Naruto Sage TGR NR-TGR-027", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-027", "description": "Naruto Kayou Naruto TGR NR-TGR-001", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-028", "description": "Naruto Kayou Naruto TGR NR-TGR-015", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-029", "description": "Naruto Kayou Naruto TGR NR-TGR-023", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-030", "description": "Naruto Kayou Obito Gold AR NR-AR-041", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-031", "description": "Naruto Kayou Onoki UR NR-UR-002", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-032", "description": "Naruto Kayou Pain TGR NR-TGR-011", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-033", "description": "Naruto Kayou Sakura TGR NR-TGR-031", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-034", "description": "Naruto Kayou Sarada SP NR-SP-028", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-035", "description": "Naruto Kayou Sasori Gold AR NR-AR-014", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-036", "description": "Naruto Kayou Sasuke SSR NR-SSR-055", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-037", "description": "Naruto Kayou Sasuke TGR NR-TGR-002", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-038", "description": "Naruto Kayou Sasuke TGR NR-TGR-024", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-039", "description": "Naruto Kayou Sasuke UR NR-UR-014", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-040", "description": "Naruto Kayou Sasuke UR NR-UR-036", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-041", "description": "Naruto Kayou Sasuke UR NR-UR-054", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-042", "description": "Naruto Kayou Saurda TGR NR-TGR-021", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-043", "description": "Naruto Kayou Shikadai TGR NR-TGR-033", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-044", "description": "Naruto Kayou Tobi TGR NR-TGR-010", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-045", "description": "Naruto Kayou Tsunade Gold AR NR-AR-026", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-046", "description": "Naruto Kayou Tsunade OR NR-OR-072", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-047", "description": "Naruto Kayou Tsunade TGR NR-TGR-008", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-048", "description": "Naruto Kayou Tsunade UR NR-UR-017", "category": "Naruto Singles", "cost": 0.216, "price": 0 }, { "sku": "NS-G1", "description": "Naruto Singles $1 (Generic)", "category": "Naruto Singles", "cost": 0.0, "price": 0 }, { "sku": "NS-G2", "description": "Naruto Singles $2 (Generic)", "category": "Naruto Singles", "cost": 0.0, "price": 0 }, { "sku": "NSE-001", "description": "Naruto Tier 3 Wave 1 Booster Pack 39 total", "category": "Naruto Sealed", "cost": 1.078, "price": 0 }, { "sku": "NSE-G1", "description": "Naruto Sealed (Generic)", "category": "Naruto Sealed", "cost": 0.0, "price": 0 }, { "sku": "OPG-001", "description": "Nami OP06-101 R Alt PSA 8", "category": "One Piece Graded", "cost": 17.41, "price": 30.0 }, { "sku": "OPG-002", "description": "One Piece Eustass Captain Kid V-Jump Promo April 2024 PSA 7 Japanese", "category": "One Piece Graded", "cost": 12.51, "price": 25.0 }, { "sku": "OPG-003", "description": "One Piece Luffy 2022 Championship P-001 Promo PSA 9 Japanese", "category": "One Piece Graded", "cost": 29.95, "price": 50.0 }, { "sku": "OPG-004", "description": "One Piece Luffy 500 Years in the Future OP07-109 SR PSA 10 Japanese", "category": "One Piece Graded", "cost": 27.27, "price": 65.0 }, { "sku": "OPG-005", "description": "One Piece Luffy P-041 7-Eleven Promo PSA 7 Japanese", "category": "One Piece Graded", "cost": 12.51, "price": 25.0 }, { "sku": "OPS-001", "description": "Ace 7-Eleven Promo ST13-002 Sealed", "category": "One Piece Singles", "cost": 2.28, "price": 0 }, { "sku": "OPS-002", "description": "Gecko Moria OP06-086 SR", "category": "One Piece Singles", "cost": 1.074, "price": 2.0 }, { "sku": "OPS-003", "description": "Kaido & Lin Lin OP08-119 SEC", "category": "One Piece Singles", "cost": 1.074, "price": 5.0 }, { "sku": "OPS-004", "description": "Kaido OP05-118 SEC", "category": "One Piece Singles", "cost": 0.79, "price": 3.0 }, { "sku": "OPS-005", "description": "Kouzuki Toki OP02-031 UC", "category": "One Piece Singles", "cost": 1.074, "price": 5.0 }, { "sku": "OPS-006", "description": "Kuzan OP02-123 SEC", "category": "One Piece Singles", "cost": 0.86, "price": 4.0 }, { "sku": "OPS-007", "description": "Luffy 7-Eleven Promo ST13-003 Sealed", "category": "One Piece Singles", "cost": 2.28, "price": 0 }, { "sku": "OPS-008", "description": "Luffy Championship Promo - P-001 Sealed", "category": "One Piece Singles", "cost": 13.65, "price": 0 }, { "sku": "OPS-009", "description": "Luffy OP05-119 SEC", "category": "One Piece Singles", "cost": 0.79, "price": 5.0 }, { "sku": "OPS-010", "description": "Luffy ST18-005 SR", "category": "One Piece Singles", "cost": 3.1, "price": 4.0 }, { "sku": "OPS-011", "description": "One Piece Luffy 500 Years in the Future OP07-109 SR", "category": "One Piece Singles", "cost": 1.345, "price": 0 }, { "sku": "OPS-012", "description": "Portgas D. Ace OP07-119 SEC ", "category": "One Piece Singles", "cost": 1.49, "price": 4.0 }, { "sku": "OPS-013", "description": "Sabo 7-Eleven Promo ST13-001 Sealed", "category": "One Piece Singles", "cost": 2.4, "price": 0 }, { "sku": "OPS-014", "description": "Sabo OP07-118 SEC", "category": "One Piece Singles", "cost": 1.26, "price": 4.0 }, { "sku": "OPS-015", "description": "Shanks OP01-120 SEC", "category": "One Piece Singles", "cost": 1.16, "price": 4.0 }, { "sku": "OPS-016", "description": "Uta ST11-001 SEC", "category": "One Piece Singles", "cost": 1.074, "price": 3.0 }, { "sku": "OPS-017", "description": "Yamato OP01-121 SEC", "category": "One Piece Singles", "cost": 0.79, "price": 4.0 }, { "sku": "OPS-018", "description": "Zoro OP06-118 SEC", "category": "One Piece Singles", "cost": 4.09, "price": 10.0 }, { "sku": "OPS-019", "description": "Zoro ST18-004 SR", "category": "One Piece Singles", "cost": 3.1, "price": 5.0 }, { "sku": "P-001", "description": "Attack on Titan Chibi Armin", "category": "Pins", "cost": 0.613, "price": 5.0 }, { "sku": "P-002", "description": "Attack on Titan Chibi Eren", "category": "Pins", "cost": 0.613, "price": 5.0 }, { "sku": "P-003", "description": "Attack on Titan Chibi Hange", "category": "Pins", "cost": 0.613, "price": 5.0 }, { "sku": "P-004", "description": "Attack on Titan Chibi Mikasa", "category": "Pins", "cost": 0.613, "price": 5.0 }, { "sku": "P-005", "description": "Blue-Eyes White Dragon Pin", "category": "Pins", "cost": 1.58, "price": 5.0 }, { "sku": "P-006", "description": "Charizard Pin", "category": "Pins", "cost": 1.79, "price": 5.0 }, { "sku": "P-007", "description": "Gengar & Cleffable Pin ", "category": "Pins", "cost": 0.68, "price": 5.0 }, { "sku": "P-008", "description": "Gengar Akatsuki Pin ", "category": "Pins", "cost": 0.68, "price": 5.0 }, { "sku": "P-009", "description": "Gengar Tongue out Pin", "category": "Pins", "cost": 1.085, "price": 5.0 }, { "sku": "P-010", "description": "Gyarados Pin", "category": "Pins", "cost": 1.78, "price": 5.0 }, { "sku": "P-011", "description": "Haunter Pin", "category": "Pins", "cost": 0.68, "price": 5.0 }, { "sku": "P-012", "description": "One Piece Emblem Piin", "category": "Pins", "cost": 1.825, "price": 5.0 }, { "sku": "P-013", "description": "Pikachu Poncho Pin - Eevee", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-014", "description": "Pikachu Poncho Pin - Espeon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-015", "description": "Pikachu Poncho Pin - Flareon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-016", "description": "Pikachu Poncho Pin - Glaceon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-017", "description": "Pikachu Poncho Pin - Jolteon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-018", "description": "Pikachu Poncho Pin - Leafeon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-019", "description": "Pikachu Poncho Pin - Mega Charizard Y", "category": "Pins", "cost": 1.86, "price": 5.0 }, { "sku": "P-020", "description": "Pikachu Poncho Pin - Sylveon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-021", "description": "Pikachu Poncho Pin - Umbreon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-022", "description": "Pikachu Poncho Pin - Vaporeon", "category": "Pins", "cost": 0.58, "price": 5.0 }, { "sku": "P-023", "description": "Pokemon x Demon Slayer - Mankey", "category": "Pins", "cost": 0.84, "price": 5.0 }, { "sku": "P-024", "description": "Pokemon x Demon Slayer - Pikachu", "category": "Pins", "cost": 0.84, "price": 5.0 }, { "sku": "P-025", "description": "Pokemon x Demon Slayer - Squirtle", "category": "Pins", "cost": 0.84, "price": 5.0 }, { "sku": "P-026", "description": "Sataro Gojo Pin ", "category": "Pins", "cost": 2.17, "price": 5.0 }, { "sku": "P-027", "description": "Zenitsu Pin", "category": "Pins", "cost": 0.84, "price": 5.0 }, { "sku": "P-BUN", "description": "Pikachu Poncho Pin Bundle", "category": "Pins", "cost": 0.0, "price": 30.0 }, { "sku": "PG-001", "description": "Baxcalibur 077/073 AR PSA 10 Japanese", "category": "Pokemon Graded", "cost": 0.0, "price": 75.0 }, { "sku": "PG-002", "description": "Charizard 005/032 Pokekyun CP3 PSA 9 Japanese", "category": "Pokemon Graded", "cost": 72.0, "price": 130.0 }, { "sku": "PG-003", "description": "Charizard SM158 Black Star Promo PSA 9", "category": "Pokemon Graded", "cost": 0.0, "price": 170.0 }, { "sku": "PG-004", "description": "Chestnaught 11/162 XY Holo PSA 9", "category": "Pokemon Graded", "cost": 0.0, "price": 50.0 }, { "sku": "PG-005", "description": "Dark Houndoom Holo PSA 7 Japanese", "category": "Pokemon Graded", "cost": 0.0, "price": 65.0 }, { "sku": "PG-006", "description": "Flareon 072/069 Full Art PSA 10 Japanese", "category": "Pokemon Graded", "cost": 60.0, "price": 70.0 }, { "sku": "PG-007", "description": "Ho-oh GX 053/051 Full Art PSA 9 Japanese", "category": "Pokemon Graded", "cost": 40.0, "price": 100.0 }, { "sku": "PG-008", "description": "Jolteon 037/080 CGC 6 Japanese", "category": "Pokemon Graded", "cost": 0.0, "price": 30.0 }, { "sku": "PG-009", "description": "Onix 9/12 McDonald's Promo PSA 9", "category": "Pokemon Graded", "cost": 0.0, "price": 25.0 }, { "sku": "PG-010", "description": "Pidgeot 10/112 Reverse Holo PSA 9", "category": "Pokemon Graded", "cost": 0.0, "price": 135.0 }, { "sku": "PG-011", "description": "Pikachu 104/100 Full Art PSA 9 Japanese", "category": "Pokemon Graded", "cost": 60.0, "price": 75.0 }, { "sku": "PG-012", "description": "Raikou 218/172 SAR PSA 9 Japanese", "category": "Pokemon Graded", "cost": 42.0, "price": 60.0 }, { "sku": "PG-013", "description": "Suicune 215/172 SAR PSA 9 Japanese", "category": "Pokemon Graded", "cost": 60.0, "price": 70.0 }, { "sku": "PL-001", "description": "Dragonite Plush", "category": "Plush", "cost": 3.74, "price": 10.0 }, { "sku": "PL-002", "description": "Kyogre Plush", "category": "Plush", "cost": 3.74, "price": 10.0 }, { "sku": "PL-003", "description": "Mewtwo Plush", "category": "Plush", "cost": 3.74, "price": 10.0 }, { "sku": "PL-004", "description": "Pikachu Poncho Mega Charizard Y Plush", "category": "Plush", "cost": 5.235, "price": 15.0 }, { "sku": "PL-005", "description": "Pikachu Poncho Mega Charizard x Plush", "category": "Plush", "cost": 5.154, "price": 15.0 }, { "sku": "PL-006", "description": "Sylveon Plush", "category": "Plush", "cost": 3.095, "price": 10.0 }, { "sku": "PO-001", "description": "Attack on Titan 7-Eleven Poster", "category": "Posters", "cost": 6.07, "price": 0 }, { "sku": "PO-002", "description": "Pokemon Legends Z-A Poster", "category": "Posters", "cost": 5.265, "price": 0 }, { "sku": "PS-001", "description": "Aggron Vmax 097/172", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-002", "description": "Alakazam 071/063 AR", "category": "Pokemon Singles", "cost": 3.905, "price": 6.0 }, { "sku": "PS-003", "description": "Altaria 18/127 Reverse Holo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-004", "description": "Arcanine EX 016/078 Japanese", "category": "Pokemon Singles", "cost": 5.0, "price": 0 }, { "sku": "PS-005", "description": "Arcanine EX SR SV 092/078", "category": "Pokemon Singles", "cost": 5.063, "price": 10.0 }, { "sku": "PS-006", "description": "Ariados 205/184 CHR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-007", "description": "Articuno AR 102/100", "category": "Pokemon Singles", "cost": 6.185, "price": 10.0 }, { "sku": "PS-008", "description": "Beautifly 006/055 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 4.0 }, { "sku": "PS-009", "description": "Blacephalon GX 023/095 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-010", "description": "Blastoise EX 186/165 SR 151 Full Art Japanese", "category": "Pokemon Singles", "cost": 9.49, "price": 18.0 }, { "sku": "PS-011", "description": "Blaziken 101/098 AR", "category": "Pokemon Singles", "cost": 4.43, "price": 7.0 }, { "sku": "PS-012", "description": "Bulbasaur 064/063 AR", "category": "Pokemon Singles", "cost": 7.64, "price": 14.0 }, { "sku": "PS-013", "description": "Celebi EX 004/059 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 12.0 }, { "sku": "PS-014", "description": "Centiskorch V 218/184 CSR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-015", "description": "Centiskorch Vmax 023/184 Japanese", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-016", "description": "Centiskorch Vmax SV109/SV122", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-017", "description": "Charizard 017/184 Holo Japanese", "category": "Pokemon Singles", "cost": 3.0, "price": 0 }, { "sku": "PS-018", "description": "Charizard 025/185 ", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-019", "description": "Charizard 025/185 Cracked Ice Holo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-020", "description": "Charizard V 014/100 Japanese", "category": "Pokemon Singles", "cost": 3.0, "price": 0 }, { "sku": "PS-021", "description": "Charizard Vstar 014/172 Japanese", "category": "Pokemon Singles", "cost": 7.0, "price": 0 }, { "sku": "PS-022", "description": "Charmander 168/165 AR", "category": "Pokemon Singles", "cost": 12.87, "price": 25.0 }, { "sku": "PS-023", "description": "Cinderave V 018/072", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-024", "description": "Cinderave Vmax 019/072", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-025", "description": "Cleffa 049/070 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 15.0 }, { "sku": "PS-026", "description": "Cleffable 051/070 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 3.0 }, { "sku": "PS-027", "description": "Coalossal Vmax 043/076 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-028", "description": "Cramorant Vmax 055/072", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-029", "description": "Cresselia 008/012 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 8.0 }, { "sku": "PS-030", "description": "Crobat Neo Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-031", "description": "Crobat Vmax 045/072", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-032", "description": "Dark Arbok 2/82 Holo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-033", "description": "Dark Weezing 14/82 Holo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-034", "description": "Darkrai DP4 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 18.0 }, { "sku": "PS-035", "description": "Delphox Break 072/078 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-036", "description": "Dhelmise VMAX 010/072 ", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-037", "description": "Dragonite Vstar 050/071 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-038", "description": "Drednaw Vmax 075/073 HR", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-039", "description": "Dudunsparce EX 178/159 ", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-040", "description": "Dusknoir 007/012 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 7.0 }, { "sku": "PS-041", "description": "Eevee 011/012 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 15.0 }, { "sku": "PS-042", "description": "Electivire 038/100 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 18.0 }, { "sku": "PS-043", "description": "Empoleon 27/147 Reverse Holo League Promo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-044", "description": "Ethan's Ho-Oh ex 039/182", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-045", "description": "Ethan's Typhlosion 070/063 AR", "category": "Pokemon Singles", "cost": 12.86, "price": 17.0 }, { "sku": "PS-046", "description": "Exeggutor 052/082 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-047", "description": "Floatzel 019/090 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 3.0 }, { "sku": "PS-048", "description": "Flygon 041/054 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 20.0 }, { "sku": "PS-049", "description": "Galarian Meowth SV086/SV122", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-050", "description": "Galarian Sirfetch'd V 174/185", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-051", "description": "Gardevoir Vmax 076/073 HR", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-052", "description": "Glalie 30/108 Power Keepers Reverse Holo Stamped", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-053", "description": "Gliscor DPBP#264 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-054", "description": "Golduck Break 18/122", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-055", "description": "Grapploct V 072/073", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-056", "description": "Grumpig 030/054 Holo Japanese (ARBOK MITCH DEAL Start)", "category": "Pokemon Singles", "cost": 1.0, "price": 4.0 }, { "sku": "PS-057", "description": "Heatran 021/090 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-058", "description": "Hisuian Samurott Vstar 053/067 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-059", "description": "Houndoom TG10/TG30", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-060", "description": "Impidimp SV083/SV122", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-061", "description": "Infernape 070/066 AR Japanese", "category": "Pokemon Singles", "cost": 3.76, "price": 8.0 }, { "sku": "PS-062", "description": "Iron Valliant EX 080/066 SR", "category": "Pokemon Singles", "cost": 4.43, "price": 6.0 }, { "sku": "PS-063", "description": "Ivysaur 065/063 AR", "category": "Pokemon Singles", "cost": 7.8, "price": 12.0 }, { "sku": "PS-064", "description": "Kingdra Neo Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-065", "description": "Kleavor 071/067 CHR Japanese", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-066", "description": "Lt Surge's Electabuzz Gym Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-067", "description": "Lucario V 004/021 Japanese", "category": "Pokemon Singles", "cost": 4.0, "price": 0 }, { "sku": "PS-068", "description": "Lucario Vstar 005/021 Japanese", "category": "Pokemon Singles", "cost": 3.0, "price": 0 }, { "sku": "PS-069", "description": "Lunatone 029/053 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-070", "description": "Lycanroc GX SSR 227/150 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-071", "description": "Magneton Neo Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-072", "description": "Magnezone DPBP#090 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 10.0 }, { "sku": "PS-073", "description": "Malamar 199/184 CHR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-074", "description": "Mamoswine DPBP#278 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 8.0 }, { "sku": "PS-075", "description": "Marowak Break 79/162", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-076", "description": "Mega Abomasnow EX 076/063 SR", "category": "Pokemon Singles", "cost": 5.27, "price": 6.0 }, { "sku": "PS-077", "description": "Mega Absol EX 079/063 SR", "category": "Pokemon Singles", "cost": 6.338, "price": 9.0 }, { "sku": "PS-078", "description": "Mega Camerupt EX 077/063 SR", "category": "Pokemon Singles", "cost": 5.22, "price": 8.0 }, { "sku": "PS-079", "description": "Mega Kangaskhan EX 080/063 SR", "category": "Pokemon Singles", "cost": 5.485, "price": 9.0 }, { "sku": "PS-080", "description": "Mega Latias EX 079/063 SR", "category": "Pokemon Singles", "cost": 8.925, "price": 9.0 }, { "sku": "PS-081", "description": "Mega Lucario EX 078/063 SR", "category": "Pokemon Singles", "cost": 16.16, "price": 18.0 }, { "sku": "PS-082", "description": "Mega Manectric EX 077/063 SR", "category": "Pokemon Singles", "cost": 4.53, "price": 8.0 }, { "sku": "PS-083", "description": "Mega Mawile 046/063 RR (freebie throw in)", "category": "Pokemon Singles", "cost": 0.0, "price": 2.0 }, { "sku": "PS-084", "description": "Mega Venusaur EX 076/063 SR", "category": "Pokemon Singles", "cost": 13.44, "price": 15.0 }, { "sku": "PS-085", "description": "Meloetta EX 011/020 Japanese", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-086", "description": "Mew EX 88/92 Celebrations", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-087", "description": "Miraidon EX 227/198", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-088", "description": "Noctowl 059/070 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 15.0 }, { "sku": "PS-089", "description": "Nosepass 010/012 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 8.0 }, { "sku": "PS-090", "description": "Oranguru 212/184 CHR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-091", "description": "Orbeetle V 214/184 CSR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-092", "description": "Pachirisu DP4 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 15.0 }, { "sku": "PS-093", "description": "Paldean Tauros 084/073 AR Japanese", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-094", "description": "Parasect 072/071 CHR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-095", "description": "Pawmi 226/091", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-096", "description": "Pikachu Full Art 005/025 Celebrations", "category": "Pokemon Singles", "cost": 4.0, "price": 0 }, { "sku": "PS-097", "description": "Pikachu SWSH061 Promo", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-098", "description": "Pikachu V 043/185", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-099", "description": "Porygon-z DPBP#167 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-100", "description": "Professor's Research 024/025 Celebrations", "category": "Pokemon Singles", "cost": 3.0, "price": 0 }, { "sku": "PS-101", "description": "Professor's Research 028/029 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-102", "description": "Raging Bolt EX 196/162", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-103", "description": "Raichu GX SM213 Promo", "category": "Pokemon Singles", "cost": 2.0, "price": 0 }, { "sku": "PS-104", "description": "Raikou EX 025/069 Japanese END OF MITCH LOT", "category": "Pokemon Singles", "cost": 1.0, "price": 11.0 }, { "sku": "PS-105", "description": "Raikou V 048/17", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-106", "description": "Rapidash 011/080 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 20.0 }, { "sku": "PS-107", "description": "Rayquaza V 110/203 ", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-108", "description": "Regigigas 111/DP-P Holo Japanese Promo", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-109", "description": "Reshiram 160/086 AR ", "category": "Pokemon Singles", "cost": 5.572, "price": 9.0 }, { "sku": "PS-110", "description": "Riolu 068/063 AR", "category": "Pokemon Singles", "cost": 6.426, "price": 7.0 }, { "sku": "PS-111", "description": "Rocket's Crobat 117/098 SR", "category": "Pokemon Singles", "cost": 4.56, "price": 0 }, { "sku": "PS-112", "description": "Rocket's Crobat 131/098 UR", "category": "Pokemon Singles", "cost": 13.22, "price": 22.0 }, { "sku": "PS-113", "description": "Rocket's Houndoom 100/098 AR", "category": "Pokemon Singles", "cost": 2.913, "price": 8.0 }, { "sku": "PS-114", "description": "Rocket's Nidoking 116/098 SR", "category": "Pokemon Singles", "cost": 5.135, "price": 10.0 }, { "sku": "PS-115", "description": "Rocket's Wobbuffet 103/098 AR", "category": "Pokemon Singles", "cost": 2.913, "price": 7.0 }, { "sku": "PS-116", "description": "Roseanne's Research 125/132 League Promo", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-117", "description": "Shaymin EX 063/078 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 15.0 }, { "sku": "PS-118", "description": "Shiny Charizard EX 331/190 SSR Japanese", "category": "Pokemon Singles", "cost": 16.536, "price": 22.0 }, { "sku": "PS-119", "description": "Sobble SV025/SV122", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-120", "description": "Solrock 189/172 AR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-121", "description": "Spiritomb DPBP#501 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-122", "description": "Staraptor 080/100 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 10.0 }, { "sku": "PS-123", "description": "Staraptor DPBP#459 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 10.0 }, { "sku": "PS-124", "description": "Starmie Break 32/108", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-125", "description": "Steelix V 081/076 SR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-126", "description": "Talonflame V 168/185", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-127", "description": "Tangrowth 003/090 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 4.0 }, { "sku": "PS-128", "description": "Tapu Koko V 072/070 SR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-129", "description": "Torterra DPBP#450 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 10.0 }, { "sku": "PS-130", "description": "Toxicroak 057/090 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-131", "description": "Toxtricity 181/172 AR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-132", "description": "Tropius 074/073 AR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-133", "description": "Tyranitar GX 059/095 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-134", "description": "Ursaring Neo Holo Japanese ", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-135", "description": "Venusaur 15/102 Celebrations", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-136", "description": "Venusaur EX 184/165 SR 151 Full Art Japanese", "category": "Pokemon Singles", "cost": 9.49, "price": 17.0 }, { "sku": "PS-137", "description": "Vikavolt V 180/189", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-138", "description": "Volcarona V 069/067 SR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-139", "description": "Vulpix 067/063 AR", "category": "Pokemon Singles", "cost": 3.38, "price": 6.0 }, { "sku": "PS-140", "description": "Wallace 091/068 HR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-141", "description": "Weavile 061/096 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 5.0 }, { "sku": "PS-142", "description": "Wugtrio 224/091", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-143", "description": "Wyrdeer 070/067 CHR Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-144", "description": "Yanmega 002/012 Holo Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 3.0 }, { "sku": "PS-145", "description": "Zeraora Vmax 041/172 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-146", "description": "Zeraora Vmax SAR 219/172 Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 0 }, { "sku": "PS-147", "description": "Mega Venusaur EX 155/132", "category": "Pokemon Singles", "cost": 0.0, "price": 25.0 }, { "sku": "PS-148", "description": "Brock's Rhydon 2/132 Holo", "category": "Pokemon Singles", "cost": 0.0, "price": 30.0 }, { "sku": "PS-149", "description": "Charizard GX 011/051 Japanese", "category": "Pokemon Singles", "cost": 0.0, "price": 25.0 }, { "sku": "PS-150", "description": "Emolga 023/020 Full Art Japanese", "category": "Pokemon Singles", "cost": 1.0, "price": 110.0 }, { "sku": "PS-151", "description": "Gengar SWSH052 Black Star Promo", "category": "Pokemon Singles", "cost": 0.0, "price": 115.0 }, { "sku": "PS-152", "description": "Golem 122/128 Holo E-Series Japanese", "category": "Pokemon Singles", "cost": 0.0, "price": 60.0 }, { "sku": "PS-153", "description": "Greninja Gold Star SWSH144 Black Star Promo Sealed", "category": "Pokemon Singles", "cost": 10.0, "price": 0 }, { "sku": "PS-154", "description": "Kingdra Neo Holo Nose Japanese", "category": "Pokemon Singles", "cost": 0.0, "price": 25.0 }, { "sku": "PS-155", "description": "Lt Surge's Magneton 8/132 Holo", "category": "Pokemon Singles", "cost": 0.0, "price": 35.0 }, { "sku": "PS-156", "description": "Misty's Gyarados 13/132 Holo", "category": "Pokemon Singles", "cost": 0.0, "price": 150.0 }, { "sku": "PS-157", "description": "Regidrago 108/098 SR Japanese", "category": "Pokemon Singles", "cost": 0.0, "price": 30.0 }, { "sku": "PS-158", "description": "Snorlax Jungle Holo Japanese", "category": "Pokemon Singles", "cost": 0.0, "price": 0 }, { "sku": "PS-159", "description": "Typhlosion Neo Holo Japanese 57", "category": "Pokemon Singles", "cost": 0.0, "price": 0 }, { "sku": "PS-G1", "description": "Pokemon Singles $1 (Generic)", "category": "Pokemon Singles", "cost": 0.0, "price": 0 }, { "sku": "PSE-001", "description": "Charizard & Reshiram GX Premium Collection", "category": "Pokemon Sealed", "cost": 99.1, "price": 0 }, { "sku": "PSE-002", "description": "Darkness Ablaze Booster Box", "category": "Pokemon Sealed", "cost": 206.0, "price": 0 }, { "sku": "PSE-003", "description": "Shining Fates Mini Tin Display of 10 tins", "category": "Pokemon Sealed", "cost": 135.0, "price": 0 }, { "sku": "PSE-G1", "description": "Pokemon Sealed (Generic)", "category": "Pokemon Sealed", "cost": 0.0, "price": 0 }, { "sku": "ST-001", "description": "Dragon Ball Lotte Sticker All Characters", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "ST-002", "description": "Dragon Ball Lotte Sticker Bulma", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "ST-003", "description": "Dragon Ball Lotte Sticker Goku", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "ST-004", "description": "Dragon Ball Lotte Sticker Krillin", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "ST-005", "description": "Dragon Ball Lotte Sticker Pilaf", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "ST-006", "description": "Dragon Ball Lotte Sticker Roshi", "category": "Stickers", "cost": 0.65, "price": 0 }, { "sku": "YG-001", "description": "PSA 10 Red Eyes Black Dragon Alt PAC1-JP031 ", "category": "Yugioh Graded", "cost": 37.91, "price": 80.0 }, { "sku": "YG-002", "description": "PSA 9 Dark Magician Girl YAP1-006", "category": "Yugioh Graded", "cost": 37.91, "price": 60.0 }, { "sku": "YG-003", "description": "Crystal Beast Sapphire Pegasus CT04-EN002 ", "category": "Yugioh Graded", "cost": 0.0, "price": 75.0 }, { "sku": "YG-004", "description": "Dark Magician Girl YAP1-JP006 PSA 9 Japanese", "category": "Yugioh Graded", "cost": 40.0, "price": 0 }, { "sku": "YG-005", "description": "Rainbow Dragon TAEV- JP006 PSA 8 Japanese", "category": "Yugioh Graded", "cost": 18.0, "price": 35.0 }, { "sku": "YG-006", "description": "Red Eyes Black Dragon PAC1-JP031 PSA 10 Japanese", "category": "Yugioh Graded", "cost": 40.0, "price": 0 }, { "sku": "YS-001", "description": "Black Luster Soldier 15AY-KRA01 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-002", "description": "Black Luster Soldier Envoy of the Beginning 15AY-KRA02 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-003", "description": "Blue Eyes Jet Dragon BACH-JP004 Ultimate Rare", "category": "Yugioh Singles", "cost": 4.6, "price": 0 }, { "sku": "YS-004", "description": "Blue Eyes Shining Dragon VB7-JP001 Ultra Rare", "category": "Yugioh Singles", "cost": 2.19, "price": 0 }, { "sku": "YS-005", "description": "Blue Eyes Toon Dragon BE1-JP066 Super Rare", "category": "Yugioh Singles", "cost": 1.81, "price": 0 }, { "sku": "YS-006", "description": "Blue Eyes Ultimate Dragon RD/SD0A-JP001 Rush Ultra Rare", "category": "Yugioh Singles", "cost": 2.035, "price": 0 }, { "sku": "YS-007", "description": "Blue Eyes White Dragon LOB Art Secret Rare", "category": "Yugioh Singles", "cost": 1.441, "price": 0 }, { "sku": "YS-008", "description": "Blue Eyes White Dragon RD/SD0A-JP002 Rush Ultra Rare", "category": "Yugioh Singles", "cost": 2.035, "price": 0 }, { "sku": "YS-009", "description": "Blue Eyes White Dragon Rush Duel Ultra Rare", "category": "Yugioh Singles", "cost": 2.115, "price": 0 }, { "sku": "YS-010", "description": "Blue Eyes White Dragon Stone Tablet Art Secret Rare", "category": "Yugioh Singles", "cost": 1.441, "price": 0 }, { "sku": "YS-011", "description": "Buster Blader 15AY-KRB04 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-012", "description": "Buster Blader Lost Art YAP1-JP007 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-013", "description": "Celtic Guardian 15AX-KRM06 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-014", "description": "Celtic Guardian Lost Art YAP1-JP004 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-015", "description": "Cyber Dragon RD/ORp1-JP024 Rush Ultra Rare", "category": "Yugioh Singles", "cost": 3.7, "price": 0 }, { "sku": "YS-016", "description": "Dark Burning Magic 15AX-KRY02 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-017", "description": "Dark Magician 15AX-KRY01 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-018", "description": "Dark Magician 15AY-KRA03 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-019", "description": "Dark Magician Arkana Art 15AY-KRB02 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-020", "description": "Dark Magician Arkana Art 15AY-KRC09 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-021", "description": "Dark Magician Arkana Art QCAC-JP018 Secret Rare", "category": "Yugioh Singles", "cost": 0.852, "price": 0 }, { "sku": "YS-022", "description": "Dark Magician Girl 15AY-KRB03 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-023", "description": "Dark Magician Girl 15AY-KRC10 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-024", "description": "Dark Magician Girl Lost Art YAP1-JP006 Ultra Rare", "category": "Yugioh Singles", "cost": 7.33, "price": 0 }, { "sku": "YS-025", "description": "Dark Magician Girl MFC Art QCCU-JP002 Secret Rare", "category": "Yugioh Singles", "cost": 0.852, "price": 0 }, { "sku": "YS-026", "description": "Dark Magician Girl RD/G001-JP002 Rush Duel", "category": "Yugioh Singles", "cost": 2.939, "price": 0 }, { "sku": "YS-027", "description": "Dark Magician Girl YGLD-ENA04 normal", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-028", "description": "Dark Magician Girl YGLD-ENB03", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-029", "description": "Dark Magician Girl YGLD-ENC10 normal", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-030", "description": "Dark Magician Girl the Dragon Knight DLCS-EN006 Blue Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-031", "description": "Dark Magician Girl the Dragon Knight DLCS-EN006 Purple Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-032", "description": "Dark Magician Girl the Dragon Knight QCAC-JP020 Secret Rare", "category": "Yugioh Singles", "cost": 0.852, "price": 0 }, { "sku": "YS-033", "description": "Dark Magician SDY Art QCCU-JP001 Secret Rare", "category": "Yugioh Singles", "cost": 0.852, "price": 0 }, { "sku": "YS-034", "description": "Dark Magician YGLD-ENA03 normal", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-035", "description": "Dark Magician YGLD-ENB02", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-036", "description": "Dark Magician YGLD-ENC09 ", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-037", "description": "Dark Magician of Chaos 15AY-KRC02 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-038", "description": "Dark Magician of Chaos YGLD-ENC02 ", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-039", "description": "Dark Paladin 15AX-KRY38 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-040", "description": "Dark Paladin 15AY-KRC41 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-041", "description": "Diabellstar the Black Witch QCAC-JP012 Secret Rare", "category": "Yugioh Singles", "cost": 1.9, "price": 0 }, { "sku": "YS-042", "description": "Dragon Master Knight 15AX-KRM34 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-043", "description": "Elemental Hero Avian Alt Art QCAC-JP026 Secret Rare", "category": "Yugioh Singles", "cost": 1.038, "price": 0 }, { "sku": "YS-044", "description": "Elemental Hero Avian QCAC-JP026 Secret Rare", "category": "Yugioh Singles", "cost": 0.804, "price": 0 }, { "sku": "YS-045", "description": "Elemental Hero Burstinatrix Alt Art QCAC-JP027 Secret Rare", "category": "Yugioh Singles", "cost": 1.038, "price": 0 }, { "sku": "YS-046", "description": "Elemental Hero Burstinatrix QCAC-JP027 Secret Rare", "category": "Yugioh Singles", "cost": 0.804, "price": 0 }, { "sku": "YS-047", "description": "Elemental Hero Neos Alt Art QCAC-JP025 Secret Rare", "category": "Yugioh Singles", "cost": 1.038, "price": 0 }, { "sku": "YS-048", "description": "Elemental Hero Neos QCAC-JP025 Secret Rare", "category": "Yugioh Singles", "cost": 0.804, "price": 0 }, { "sku": "YS-049", "description": "Elemental Hero Sparkman  Alt Art QCAC-JP028 Secret Rare", "category": "Yugioh Singles", "cost": 1.038, "price": 0 }, { "sku": "YS-050", "description": "Elemental Hero Sparkman QCAC-JP028 Secret Rare", "category": "Yugioh Singles", "cost": 0.804, "price": 0 }, { "sku": "YS-051", "description": "Gaia the Fierce Knight Alt 15AX-KRY05 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-052", "description": "Greystorm Reverie RD/G002-JP001 Rush Duel", "category": "Yugioh Singles", "cost": 1.78, "price": 0 }, { "sku": "YS-053", "description": "Gyakutenno Megam Lost Art YAP1-JP005 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-054", "description": "Harpie's Feather Duster 15AX-KRY50 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-055", "description": "Heavy Storm RD/G002-JP003 Rush Duel", "category": "Yugioh Singles", "cost": 1.78, "price": 0 }, { "sku": "YS-056", "description": "Jinzo Lost Art YAP1-JP008 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-057", "description": "Judgement Dragon LODT-KR026 Ultimate Rare Korean", "category": "Yugioh Singles", "cost": 8.07, "price": 0 }, { "sku": "YS-058", "description": "Kuriboh 15AY-KRA22 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-059", "description": "Magician of Black Chaos Rush Duel Ultra Rare", "category": "Yugioh Singles", "cost": 1.483, "price": 0 }, { "sku": "YS-060", "description": "Magician of Black Chaos YGLD-ENC01 ", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-061", "description": "Magician of Chaos 15AY-KRC01 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-062", "description": "Magician's Valkyria 15AX-KRM15 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-063", "description": "Magician's Valkyria RD/G002-JP002 Rush Duel", "category": "Yugioh Singles", "cost": 1.78, "price": 0 }, { "sku": "YS-064", "description": "Malefic Blue Eyes White Dragon YMP!-JP002 Secret Rare", "category": "Yugioh Singles", "cost": 0.8516, "price": 0 }, { "sku": "YS-065", "description": "Malefic Red Eyes Black Dragon YMP1-JP001 Secret Rare", "category": "Yugioh Singles", "cost": 0.8516, "price": 0 }, { "sku": "YS-066", "description": "Master of Chaos QCCU-JP007 Secret Rare", "category": "Yugioh Singles", "cost": 0.852, "price": 0 }, { "sku": "YS-067", "description": "Millenium -Eyes Restrict LDS1-EN051 Limited Edition Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-068", "description": "Obelisk the Tormentor Blue Ultra Rare Korean", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-069", "description": "Pot of Greed 15AY-KRB26 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-070", "description": "Pot of Greed RD/G001-JP003 Rush Duel", "category": "Yugioh Singles", "cost": 2.939, "price": 0 }, { "sku": "YS-071", "description": "Pot of Greed YGLD-ENB26 Common", "category": "Yugioh Singles", "cost": 0.27, "price": 0 }, { "sku": "YS-072", "description": "Red Eyes Black Dragon Alt Art Secret Rare ", "category": "Yugioh Singles", "cost": 1.582, "price": 0 }, { "sku": "YS-073", "description": "Red Eyes Black Dragon New Art Secret Rare", "category": "Yugioh Singles", "cost": 1.441, "price": 0 }, { "sku": "YS-074", "description": "Red Eyes Black Dragon RD/G002-JPC01 Rush Sealed", "category": "Yugioh Singles", "cost": 5.35, "price": 0 }, { "sku": "YS-075", "description": "Red Eyes Black Dragon Red Art Secret Rare", "category": "Yugioh Singles", "cost": 1.267, "price": 0 }, { "sku": "YS-076", "description": "Red Eyes Soul QCCP-JP112 Quarter Centuary Secret Rare", "category": "Yugioh Singles", "cost": 6.31, "price": 0 }, { "sku": "YS-077", "description": "Shiba Warrior Taro Lost Art YAP1-JP009 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-078", "description": "Sky Striker Ace Raye QCAC-JP008 Secret Rare", "category": "Yugioh Singles", "cost": 2.325, "price": 0 }, { "sku": "YS-079", "description": "Slifer the Sky Dragon Red Ultra Rare Korean", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-080", "description": "Sorcerer of Dark Magic 15AX-KRM10 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-081", "description": "Summoned Skull 15AY-KRA06 Ultra Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-082", "description": "Summoned Skull Alt 15AX-KRY06 Secret Rare", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-083", "description": "Summoned Skull Lost Art YAP1-JP003 Ultra Rare", "category": "Yugioh Singles", "cost": 0.82, "price": 0 }, { "sku": "YS-084", "description": "Time Wizard TDPP-JP008 Secret Rare", "category": "Yugioh Singles", "cost": 1.623, "price": 0 }, { "sku": "YS-085", "description": "Ultimate Flag Mech Ace Breaker RD/G001-JP001 Rush Duel", "category": "Yugioh Singles", "cost": 2.939, "price": 0 }, { "sku": "YS-G1", "description": "Yugioh Singles $1 (Generic)", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YS-G2", "description": "Yugioh Singles $2 (Generic)", "category": "Yugioh Singles", "cost": 0.0, "price": 0 }, { "sku": "YSE-001", "description": "Yugioh Premium Pack 12 Sealed", "category": "Yugioh Sealed", "cost": 2.47, "price": 0 }, { "sku": "YSE-002", "description": "Yugioh Premium Pack 12 Sealed ", "category": "Yugioh Sealed", "cost": 1.989, "price": 0 }, { "sku": "YSE-003", "description": "Yugioh Premium Pack 4 Sealed", "category": "Yugioh Sealed", "cost": 17.73, "price": 0 }, { "sku": "YSE-G1", "description": "Yugioh Sealed (Generic)", "category": "Yugioh Sealed", "cost": 0.0, "price": 0 }];
+
+
+
+            // --- STATE MANAGEMENT ---
+            const STATE = {
+                cart: JSON.parse(localStorage.getItem('pos_cart') || '[]'),
+                sales: JSON.parse(localStorage.getItem('pos_sales') || '[]'),
+                drafts: JSON.parse(localStorage.getItem('pos_drafts') || '[]'),
+                inventory: typeof inventory !== 'undefined' ? inventory : [], // Inventory injected above
+                lastId: parseInt(localStorage.getItem('pos_last_id') || '0')
+            };
+
+            // --- DOM ELEMENTS ---
+            const UI = {
+                skuSearch: document.getElementById('skuSearch'),
+                searchClear: document.getElementById('searchClear'),
+                skuSelect: document.getElementById('skuSelect'),
+                itemPreview: document.getElementById('itemPreview'),
+                previewDesc: document.getElementById('previewDesc'),
+                previewCat: document.getElementById('previewCat'),
+                previewCost: document.getElementById('previewCost'),
+                quantity: document.getElementById('quantity'),
+                addToCartBtn: document.getElementById('addToCartBtn'),
+                cartSection: document.getElementById('cartSection'),
+                cartList: document.getElementById('cartList'),
+                cartSubtotal: document.getElementById('cartSubtotal'),
+                cartTotal: document.getElementById('cartTotal'),
+                dealPrice: document.getElementById('dealPrice'),
+                clearCartBtn: document.getElementById('clearCartBtn'),
+                saveDraftBtn: document.getElementById('saveDraftBtn'),
+                checkoutBtn: document.getElementById('checkoutBtn'),
+                draftsSection: document.getElementById('draftsSection'),
+                draftsList: document.getElementById('draftsList'),
+                paymentOptions: document.querySelectorAll('.payment-option'),
+                salesList: document.getElementById('salesList'),
+                totalCount: document.getElementById('totalCount'),
+                totalRevenue: document.getElementById('totalRevenue'),
+                exportBtn: document.getElementById('exportBtn'),
+                resetBtn: document.getElementById('resetBtn'),
+                toast: document.getElementById('toast'),
+                installPrompt: document.getElementById('installPrompt'),
+                modeToggleBtn: document.getElementById('modeToggleBtn'),
+                searchMode: document.getElementById('searchMode'),
+                manualMode: document.getElementById('manualMode'),
+                manualDesc: document.getElementById('manualDesc'),
+                manualPrice: document.getElementById('manualPrice')
+            };
+
+            let selectedItem = null;
+            let selectedPayment = null;
+            let isManualMode = false;
+
+            // --- INITIALIZATION ---
+            function init() {
+                renderInventorySelect();
+                renderCart();
+                renderDrafts();
+                renderSales();
+                checkInstallPrompt();
+
+                // Restore payment selection if in cart
+                if (STATE.cart.length > 0) {
+                    UI.cartSection.style.display = 'block';
+                }
+            }
+
+            // --- INVENTORY & SEARCH ---
+            function renderInventorySelect(items = STATE.inventory) {
+                UI.skuSelect.innerHTML = '<option value="">Select from list...</option>';
+                // Limit to 100 items for performance if showing all, otherwise show all filtered
+                const limit = items === STATE.inventory ? 100 : items.length;
+
+                for (let i = 0; i < limit; i++) {
+                    const item = items[i];
+                    const option = document.createElement('option');
+                    option.value = item.sku;
+                    option.textContent = `${item.sku} - ${item.description}`;
+                    UI.skuSelect.appendChild(option);
+                }
+            }
+
+            UI.skuSearch.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                UI.searchClear.classList.toggle('visible', term.length > 0);
+
+                if (!term) {
+                    renderInventorySelect();
+                    return;
+                }
+
+                const filtered = STATE.inventory.filter(item =>
+                    item.sku.toLowerCase().includes(term) ||
+                    item.description.toLowerCase().includes(term) ||
+                    item.category.toLowerCase().includes(term)
+                );
+                renderInventorySelect(filtered);
+
+                // Auto-select if exact match
+                if (filtered.length === 1) {
+                    UI.skuSelect.value = filtered[0].sku;
+                    selectItem(filtered[0].sku);
+                }
+            });
+
+            UI.searchClear.addEventListener('click', () => {
+                UI.skuSearch.value = '';
+                UI.searchClear.classList.remove('visible');
+                renderInventorySelect();
+                resetSelection();
+            });
+
+            UI.skuSelect.addEventListener('change', (e) => {
+                selectItem(e.target.value);
+            });
+
+            function selectItem(sku) {
+                if (!sku) {
+                    resetSelection();
+                    return;
+                }
+                selectedItem = STATE.inventory.find(i => i.sku === sku);
+                if (selectedItem) {
+                    UI.previewDesc.textContent = selectedItem.description;
+                    UI.previewCat.textContent = selectedItem.category;
+                    UI.previewCost.textContent = `$${selectedItem.price.toFixed(2)}`;
+                    UI.itemPreview.classList.add('visible');
+                    UI.addToCartBtn.disabled = false;
+                }
+            }
+
+            function resetSelection() {
+                selectedItem = null;
+                UI.skuSelect.value = '';
+                UI.itemPreview.classList.remove('visible');
+                UI.addToCartBtn.disabled = true;
+                UI.quantity.value = 1;
+
+                // Reset manual inputs too
+                UI.manualDesc.value = '';
+                UI.manualPrice.value = '';
+            }
+
+            // --- MANUAL MODE TOGGLE ---
+            UI.modeToggleBtn.addEventListener('click', () => {
+                isManualMode = !isManualMode;
+                UI.searchMode.style.display = isManualMode ? 'none' : 'block';
+                UI.manualMode.style.display = isManualMode ? 'block' : 'none';
+                UI.modeToggleBtn.textContent = isManualMode ? 'Switch to Search' : 'Switch to Manual';
+
+                resetSelection();
+                checkAddButton();
+            });
+
+            // Manual Input Validation
+            [UI.manualDesc, UI.manualPrice].forEach(el => {
+                el.addEventListener('input', checkAddButton);
+            });
+
+            function checkAddButton() {
+                if (isManualMode) {
+                    const hasDesc = UI.manualDesc.value.trim().length > 0;
+                    const price = parseFloat(UI.manualPrice.value);
+                    const hasPrice = !isNaN(price) && price >= 0;
+                    UI.addToCartBtn.disabled = !(hasDesc && hasPrice);
+                } else {
+                    UI.addToCartBtn.disabled = !selectedItem;
+                }
+            }
+
+            window.adjustQty = function (delta) {
+                const newVal = parseInt(UI.quantity.value) + delta;
+                if (newVal >= 1) UI.quantity.value = newVal;
+            };
+
+            // --- CART MANAGEMENT ---
+            UI.addToCartBtn.addEventListener('click', () => {
+                let itemToAdd = null;
+                const qty = parseInt(UI.quantity.value);
+
+                if (isManualMode) {
+                    const desc = UI.manualDesc.value.trim();
+                    const price = parseFloat(UI.manualPrice.value);
+
+                    if (!desc || isNaN(price)) return;
+
+                    itemToAdd = {
+                        sku: 'MANUAL',
+                        description: desc,
+                        category: 'Manual',
+                        quantity: qty,
+                        unitPrice: price,
+                        lineTotal: price * qty
+                    };
+                } else {
+                    if (!selectedItem) return;
+                    const suggestedPrice = selectedItem.price;
+
+                    itemToAdd = {
+                        sku: selectedItem.sku,
+                        description: selectedItem.description,
+                        category: selectedItem.category,
+                        quantity: qty,
+                        unitPrice: suggestedPrice,
+                        lineTotal: suggestedPrice * qty
+                    };
+                }
+
+                STATE.cart.push(itemToAdd);
+
+                saveCart();
+                renderCart();
+                resetSelection();
+                UI.skuSearch.value = '';
+                UI.searchClear.classList.remove('visible');
+                renderInventorySelect();
+                showToast('Item added to cart');
+            });
+
+            function saveCart() {
+                localStorage.setItem('pos_cart', JSON.stringify(STATE.cart));
+            }
+
+            function renderCart() {
+                if (STATE.cart.length === 0) {
+                    UI.cartSection.style.display = 'none';
+                    return;
+                }
+
+                UI.cartSection.style.display = 'block';
+                UI.cartList.innerHTML = STATE.cart.map((item, idx) => `
+                <div class="cart-item">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.description}</div>
+                        <div class="cart-item-meta">${item.sku} • ${item.quantity} × $${item.unitPrice.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-price">$${item.lineTotal.toFixed(2)}</div>
+                    <button class="cart-remove" onclick="removeFromCart(${idx})">×</button>
+                </div>
+            `).join('');
+
+                updateTotals();
+            }
+
+            window.removeFromCart = function (idx) {
+                STATE.cart.splice(idx, 1);
+                saveCart();
+                renderCart();
+            };
+
+            UI.clearCartBtn.addEventListener('click', () => {
+                if (confirm('Clear cart?')) {
+                    clearCart();
+                }
+            });
+
+            function clearCart() {
+                STATE.cart = [];
+                selectedPayment = null;
+                UI.dealPrice.value = '';
+                UI.paymentOptions.forEach(el => el.classList.remove('selected'));
+                saveCart();
+                renderCart();
+            }
+
+            // --- DRAFTS ---
+            UI.saveDraftBtn.addEventListener('click', () => {
+                const name = prompt('Enter a name for this draft (e.g. Customer Name):');
+                if (name === null) return; // Cancelled
+
+                const draft = {
+                    id: Date.now(),
+                    timestamp: new Date().toISOString(),
+                    name: name || 'Untitled Draft',
+                    items: [...STATE.cart],
+                    dealPrice: UI.dealPrice.value
+                };
+
+                STATE.drafts.push(draft);
+                localStorage.setItem('pos_drafts', JSON.stringify(STATE.drafts));
+
+                clearCart();
+                renderDrafts();
+                showToast('Draft saved!');
+            });
+
+            function renderDrafts() {
+                if (STATE.drafts.length === 0) {
+                    UI.draftsSection.style.display = 'none';
+                    return;
+                }
+
+                UI.draftsSection.style.display = 'block';
+                UI.draftsList.innerHTML = STATE.drafts.map((draft, idx) => {
+                    const total = draft.items.reduce((sum, item) => sum + item.lineTotal, 0);
+                    const itemCount = draft.items.reduce((sum, item) => sum + item.quantity, 0);
+
+                    return `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <div class="cart-item-title">${draft.name}</div>
+                            <div class="cart-item-meta">
+                                ${new Date(draft.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • 
+                                ${itemCount} items • $${total.toFixed(2)}
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-primary" style="width: auto;" onclick="loadDraft(${idx})">Load</button>
+                            <button class="cart-remove" onclick="deleteDraft(${idx})">×</button>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            }
+
+            window.loadDraft = function (idx) {
+                if (STATE.cart.length > 0) {
+                    if (!confirm('Current cart is not empty. Overwrite with draft?')) return;
+                }
+
+                const draft = STATE.drafts[idx];
+                STATE.cart = [...draft.items];
+                UI.dealPrice.value = draft.dealPrice || '';
+
+                // Remove from drafts after loading? Optional. Let's keep it until manually deleted or maybe remove it.
+                // Standard POS usually removes it to prevent double charging.
+                STATE.drafts.splice(idx, 1);
+                localStorage.setItem('pos_drafts', JSON.stringify(STATE.drafts));
+
+                saveCart();
+                renderCart();
+                renderDrafts();
+                showToast('Draft loaded!');
+            };
+
+            window.deleteDraft = function (idx) {
+                if (!confirm('Delete this draft?')) return;
+                STATE.drafts.splice(idx, 1);
+                localStorage.setItem('pos_drafts', JSON.stringify(STATE.drafts));
+                renderDrafts();
+            };
+
+            // --- PRICING & CHECKOUT ---
+            function updateTotals() {
+                const subtotal = STATE.cart.reduce((sum, item) => sum + item.lineTotal, 0);
+                UI.cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+
+                const dealVal = parseFloat(UI.dealPrice.value);
+                const finalTotal = !isNaN(dealVal) && dealVal >= 0 ? dealVal : subtotal;
+
+                UI.cartTotal.textContent = `$${finalTotal.toFixed(2)}`;
+                checkCheckoutReady();
+            }
+
+            UI.dealPrice.addEventListener('input', updateTotals);
+
+            UI.paymentOptions.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    UI.paymentOptions.forEach(el => el.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    selectedPayment = opt.dataset.method;
+                    checkCheckoutReady();
+                });
+            });
+
+            function checkCheckoutReady() {
+                UI.checkoutBtn.disabled = !(STATE.cart.length > 0 && selectedPayment);
+            }
+
+            UI.checkoutBtn.addEventListener('click', () => {
+                const subtotal = STATE.cart.reduce((sum, item) => sum + item.lineTotal, 0);
+                const dealVal = parseFloat(UI.dealPrice.value);
+                const isDeal = !isNaN(dealVal) && dealVal >= 0;
+                const finalTotal = isDeal ? dealVal : subtotal;
+
+                // Distribute deal price if applicable
+                const finalItems = STATE.cart.map(item => {
+                    let actualPrice = item.lineTotal;
+                    if (isDeal && subtotal > 0) {
+                        actualPrice = (item.lineTotal / subtotal) * finalTotal;
+                    }
+                    return { ...item, actualPrice };
+                });
+
+                const sale = {
+                    id: ++STATE.lastId,
+                    timestamp: new Date().toISOString(),
+                    items: finalItems,
+                    total: finalTotal,
+                    paymentMethod: selectedPayment,
+                    isDeal: isDeal
+                };
+
+                STATE.sales.unshift(sale);
+                localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
+                localStorage.setItem('pos_last_id', STATE.lastId.toString());
+
+                // Reset Cart
+                clearCart();
+                renderSales();
+                renderSales();
+
+                showToast('Sale recorded successfully!');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // --- SALES HISTORY ---
+            function renderSales() {
+                UI.totalCount.textContent = STATE.sales.length;
+                const revenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
+                UI.totalRevenue.textContent = `$${revenue.toFixed(2)}`;
+
+                if (STATE.sales.length === 0) {
+                    UI.salesList.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">No sales today</div>';
+                    return;
+                }
+
+                UI.salesList.innerHTML = STATE.sales.map(sale => `
+                <div class="sale-record">
+                    <div class="sale-info">
+                        <h4>#${sale.id} • ${sale.items.length} Items</h4>
+                        <div class="sale-meta">
+                            ${new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • 
+                            ${sale.paymentMethod.toUpperCase()}
+                            ${sale.isDeal ? '• DEAL' : ''}
+                        </div>
+                    </div>
+                    <div class="sale-amount">$${sale.total.toFixed(2)}</div>
+                </div>
+            `).join('');
+            }
+
+            UI.resetBtn.addEventListener('click', () => {
+                if (confirm('⚠️ DELETE ALL SALES HISTORY?\nThis cannot be undone.')) {
+                    STATE.sales = [];
+                    STATE.lastId = 0;
+                    localStorage.removeItem('pos_sales');
+                    localStorage.removeItem('pos_last_id');
+                    renderSales();
+                }
+            });
+
+            // --- EXPORT ---
+            UI.exportBtn.addEventListener('click', async () => {
+                if (STATE.sales.length === 0) {
+                    alert('No sales to export');
+                    return;
+                }
+
+                // Generate CSV
+                const headers = ['ID', 'Timestamp', 'SKU', 'Description', 'Category', 'Qty', 'List Price', 'Actual Price', 'Tx Total', 'Payment', 'Is Deal'];
+                const rows = [headers.join(',')];
+
+                STATE.sales.forEach(sale => {
+                    sale.items.forEach(item => {
+                        rows.push([
+                            sale.id,
+                            sale.timestamp,
+                            `"${item.sku}"`,
+                            `"${item.description}"`,
+                            `"${item.category}"`,
+                            item.quantity,
+                            item.unitPrice.toFixed(2),
+                            item.actualPrice.toFixed(2),
+                            sale.total.toFixed(2),
+                            sale.paymentMethod,
+                            sale.isDeal ? 'Yes' : 'No'
+                        ].join(','));
+                    });
+                });
+
+                const csvContent = rows.join('\n');
+                const fileName = `sales_export_${new Date().toISOString().split('T')[0]}.csv`;
+                const file = new File([csvContent], fileName, { type: 'text/csv' });
+
+                // Try Web Share API first (Best for iOS)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            files: [file],
+                            title: 'Sales Export',
+                            text: 'Here is the sales export CSV.'
+                        });
+                        return;
+                    } catch (err) {
+                        console.log('Share failed', err);
+                    }
+                }
+
+                // Fallback to download
+                const url = URL.createObjectURL(file);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+
+            // --- UTILS ---
+            function showToast(msg) {
+                UI.toast.textContent = msg;
+                UI.toast.classList.add('show');
+                setTimeout(() => UI.toast.classList.remove('show'), 2000);
+            }
+
+            function checkInstallPrompt() {
+                // Simple check if running in standalone mode
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+                if (!isStandalone && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                    UI.installPrompt.style.display = 'block';
+                }
+            }
+
+            // --- SERVICE WORKER (PWA) ---
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                const CACHE_NAME = 'pos-v2';
+                self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
+                self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        fetch(e.request).catch(() => caches.match(e.request))
+                    );
+                });
+            `;
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl)
+                    .then(() => console.log('SW Registered'))
+                    .catch(err => console.log('SW Fail', err));
+            }
+
+            // Start App
+            init();
+
+        </script>
+</body>
+
+</html>
