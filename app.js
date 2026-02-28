@@ -20,7 +20,9 @@ const UI = {
     itemPreview: document.getElementById('itemPreview'),
     previewDesc: document.getElementById('previewDesc'),
     previewCat: document.getElementById('previewCat'),
+    previewCost: document.getElementById('previewCost'),
     previewCostInput: document.getElementById('previewCostInput'),
+    previewStock: document.getElementById('previewStock'),
     quantity: document.getElementById('quantity'),
     addToCartBtn: document.getElementById('addToCartBtn'),
     cartSection: document.getElementById('cartSection'),
@@ -137,6 +139,38 @@ UI.skuSelect.addEventListener('change', (e) => {
     selectItem(e.target.value);
 });
 
+function getAvailableStock(sku) {
+    const item = STATE.inventory.find(i => i.sku === sku);
+    if (!item || item.quantity == null) return null;
+
+    const soldInSales = STATE.sales.reduce((sum, sale) =>
+        sum + sale.items.filter(i => i.sku === sku).reduce((s, i) => s + i.quantity, 0), 0);
+
+    const inCart = STATE.cart
+        .filter(i => i.sku === sku)
+        .reduce((s, i) => s + i.quantity, 0);
+
+    return Math.max(0, item.quantity - soldInSales - inCart);
+}
+
+function refreshStockDisplay() {
+    if (!selectedItem || isManualMode) return;
+    const stock = getAvailableStock(selectedItem.sku);
+    if (stock === null) {
+        UI.previewStock.textContent = '-';
+        UI.previewStock.style.color = '';
+    } else if (stock === 0) {
+        UI.previewStock.textContent = '0 — Out of Stock';
+        UI.previewStock.style.color = 'var(--danger)';
+    } else if (stock <= 2) {
+        UI.previewStock.textContent = `${stock} — Low`;
+        UI.previewStock.style.color = '#f59e0b';
+    } else {
+        UI.previewStock.textContent = stock;
+        UI.previewStock.style.color = '';
+    }
+}
+
 function selectItem(sku) {
     if (!sku) {
         resetSelection();
@@ -146,7 +180,9 @@ function selectItem(sku) {
     if (selectedItem) {
         UI.previewDesc.textContent = selectedItem.description;
         UI.previewCat.textContent = selectedItem.category;
+        UI.previewCost.textContent = selectedItem.cost != null ? `$${selectedItem.cost.toFixed(2)}` : '-';
         UI.previewCostInput.value = selectedItem.price.toFixed(2);
+        refreshStockDisplay();
         UI.itemPreview.classList.add('visible');
         UI.addToCartBtn.disabled = false;
     }
@@ -282,6 +318,7 @@ window.removeFromCart = function (idx) {
     STATE.cart.splice(idx, 1);
     saveCart();
     renderCart();
+    refreshStockDisplay();
 };
 
 window.updateCartPrice = function (idx, newPrice) {
