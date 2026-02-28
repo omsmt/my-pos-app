@@ -60,6 +60,8 @@ const UI = {
     exportBtn: document.getElementById('exportBtn'),
     resetBtn: document.getElementById('resetBtn'),
     settingsBtn: document.getElementById('settingsBtn'),
+    summaryBtn: document.getElementById('summaryBtn'),
+    summarySection: document.getElementById('summarySection'),
     toast: document.getElementById('toast'),
     installPrompt: document.getElementById('installPrompt'),
     modeToggleBtn: document.getElementById('modeToggleBtn'),
@@ -591,6 +593,7 @@ UI.checkoutBtn.addEventListener('click', () => {
 
 // --- SALES HISTORY ---
 function renderSales() {
+    if (summaryVisible) renderProductSummary();
     UI.totalCount.textContent = STATE.sales.length;
     const revenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
     UI.totalRevenue.textContent = `$${revenue.toFixed(2)}`;
@@ -683,6 +686,98 @@ UI.settingsBtn.addEventListener('click', async () => {
     }
 });
 
+// --- PRODUCT SUMMARY ---
+let summaryVisible = false;
+
+UI.summaryBtn.addEventListener('click', () => {
+    summaryVisible = !summaryVisible;
+    UI.summarySection.style.display = summaryVisible ? 'block' : 'none';
+    UI.summaryBtn.textContent = summaryVisible ? '📊 Hide' : '📊 Summary';
+    if (summaryVisible) renderProductSummary();
+});
+
+function renderProductSummary() {
+    if (STATE.sales.length === 0) {
+        UI.summarySection.innerHTML = '<div style="text-align:center; color:#999; font-size:14px;">No sales to summarise</div>';
+        return;
+    }
+
+    // Aggregate items across all sales
+    const productMap = {};
+    let totalCash = 0, totalPayID = 0;
+
+    STATE.sales.forEach(sale => {
+        if (sale.paymentMethod === 'cash') totalCash += sale.total;
+        else totalPayID += sale.total;
+
+        sale.items.forEach(item => {
+            const key = item.sku === 'MANUAL' ? `MANUAL__${item.description}` : item.sku;
+            if (!productMap[key]) {
+                productMap[key] = {
+                    sku: item.sku,
+                    description: item.description,
+                    category: item.category,
+                    qty: 0,
+                    revenue: 0
+                };
+            }
+            productMap[key].qty += item.quantity;
+            productMap[key].revenue += item.actualPrice;
+        });
+    });
+
+    const products = Object.values(productMap).sort((a, b) => b.revenue - a.revenue);
+    const totalRevenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
+
+    // Group by category for category totals
+    const categoryMap = {};
+    products.forEach(p => {
+        if (!categoryMap[p.category]) categoryMap[p.category] = { qty: 0, revenue: 0 };
+        categoryMap[p.category].qty += p.qty;
+        categoryMap[p.category].revenue += p.revenue;
+    });
+    const categories = Object.entries(categoryMap).sort((a, b) => b[1].revenue - a[1].revenue);
+
+    UI.summarySection.innerHTML = `
+        <div style="font-weight:700; font-size:15px; margin-bottom:12px;">Product Breakdown</div>
+
+        <div style="margin-bottom:16px;">
+            ${products.map(p => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+                    <div style="flex:1; min-width:0;">
+                        <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.description}</div>
+                        <div style="color:var(--text-light); font-size:11px; margin-top:2px;">${p.sku} &bull; ${p.category} &bull; Qty: <strong>${p.qty}</strong></div>
+                    </div>
+                    <div style="text-align:right; margin-left:12px; flex-shrink:0;">
+                        <div style="font-weight:700;">$${p.revenue.toFixed(2)}</div>
+                        <div style="color:var(--text-light); font-size:11px;">${totalRevenue > 0 ? ((p.revenue / totalRevenue) * 100).toFixed(1) : '0.0'}%</div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+
+        <div style="font-weight:700; font-size:15px; margin-bottom:8px;">By Category</div>
+        <div style="margin-bottom:16px;">
+            ${categories.map(([cat, data]) => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:13px;">
+                    <span>${cat} <span style="color:var(--text-light);">(${data.qty} sold)</span></span>
+                    <span style="font-weight:600;">$${data.revenue.toFixed(2)}</span>
+                </div>
+            `).join('')}
+        </div>
+
+        <div style="font-weight:700; font-size:15px; margin-bottom:8px;">By Payment</div>
+        <div style="font-size:13px;">
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+                <span>💵 Cash</span><span style="font-weight:600;">$${totalCash.toFixed(2)}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0;">
+                <span>💳 PayID</span><span style="font-weight:600;">$${totalPayID.toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+}
+
 // --- EXPORT ---
 UI.exportBtn.addEventListener('click', async () => {
     if (STATE.sales.length === 0) {
@@ -690,50 +785,125 @@ UI.exportBtn.addEventListener('click', async () => {
         return;
     }
 
-    // Generate CSV
-    const headers = ['ID', 'Timestamp', 'SKU', 'Description', 'Category', 'Qty', 'List Price', 'Actual Price', 'Tx Total', 'Payment', 'Is Deal'];
+    // Wrap value in quotes and escape internal quotes by doubling them
+    function csvEscape(val) {
+        const str = String(val ?? '');
+        return (str.includes('"') || str.includes(',') || str.includes('\n'))
+            ? `"${str.replace(/"/g, '""')}"`
+            : str;
+    }
+
+    const paymentLabel = { cash: 'Cash', payid: 'PayID' };
+
+    // --- TRANSACTION ROWS ---
+    const headers = ['ID', 'Date', 'Time', 'SKU', 'Description', 'Category', 'Qty', 'Unit Price', 'List Total', 'Discount', 'Line Total', 'Tx Total', 'Payment', 'Is Deal'];
     const rows = [headers.join(',')];
 
     STATE.sales.forEach(sale => {
+        const ts = new Date(sale.timestamp);
+        const date = ts.toLocaleDateString('en-AU', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const time = ts.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const payment = paymentLabel[sale.paymentMethod] || sale.paymentMethod;
+
         sale.items.forEach(item => {
+            const listTotal = item.unitPrice * item.quantity;
+            const discount = listTotal - item.actualPrice;
             rows.push([
-                sale.id,
-                sale.timestamp,
-                `"${item.sku}"`,
-                `"${item.description}"`,
-                `"${item.category}"`,
+                csvEscape(sale.id),
+                csvEscape(date),
+                csvEscape(time),
+                csvEscape(item.sku),
+                csvEscape(item.description),
+                csvEscape(item.category),
                 item.quantity,
                 item.unitPrice.toFixed(2),
+                listTotal.toFixed(2),
+                discount.toFixed(2),
                 item.actualPrice.toFixed(2),
                 sale.total.toFixed(2),
-                sale.paymentMethod,
+                csvEscape(payment),
                 sale.isDeal ? 'Yes' : 'No'
             ].join(','));
         });
     });
 
+    // --- SUMMARY SECTION ---
+    const productMap = {};
+    let totalCash = 0, totalPayID = 0;
+
+    STATE.sales.forEach(sale => {
+        if (sale.paymentMethod === 'cash') totalCash += sale.total;
+        else totalPayID += sale.total;
+
+        sale.items.forEach(item => {
+            const key = item.sku === 'MANUAL' ? `MANUAL__${item.description}` : item.sku;
+            if (!productMap[key]) {
+                productMap[key] = { sku: item.sku, description: item.description, category: item.category, qty: 0, revenue: 0 };
+            }
+            productMap[key].qty += item.quantity;
+            productMap[key].revenue += item.actualPrice;
+        });
+    });
+
+    const products = Object.values(productMap).sort((a, b) => b.revenue - a.revenue);
+    const totalRevenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
+
+    const categoryMap = {};
+    products.forEach(p => {
+        if (!categoryMap[p.category]) categoryMap[p.category] = { qty: 0, revenue: 0 };
+        categoryMap[p.category].qty += p.qty;
+        categoryMap[p.category].revenue += p.revenue;
+    });
+    const categories = Object.entries(categoryMap).sort((a, b) => b[1].revenue - a[1].revenue);
+
+    rows.push('');
+    rows.push('--- PRODUCT SUMMARY ---');
+    rows.push(['Description', 'SKU', 'Category', 'Qty Sold', 'Revenue', '% of Total'].join(','));
+    products.forEach(p => {
+        rows.push([
+            csvEscape(p.description),
+            csvEscape(p.sku),
+            csvEscape(p.category),
+            p.qty,
+            p.revenue.toFixed(2),
+            totalRevenue > 0 ? ((p.revenue / totalRevenue) * 100).toFixed(1) + '%' : '0.0%'
+        ].join(','));
+    });
+
+    rows.push('');
+    rows.push('--- CATEGORY TOTALS ---');
+    rows.push(['Category', 'Qty Sold', 'Revenue'].join(','));
+    categories.forEach(([cat, data]) => {
+        rows.push([csvEscape(cat), data.qty, data.revenue.toFixed(2)].join(','));
+    });
+
+    rows.push('');
+    rows.push('--- PAYMENT TOTALS ---');
+    rows.push(['Method', 'Amount'].join(','));
+    rows.push(['Cash', totalCash.toFixed(2)].join(','));
+    rows.push(['PayID', totalPayID.toFixed(2)].join(','));
+    rows.push(['Total', totalRevenue.toFixed(2)].join(','));
+
+    // --- FILE GENERATION ---
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0];
-    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-').substring(0, 5); // HH-MM
+    const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-').substring(0, 5);
     const csvContent = rows.join('\n');
     const fileName = `sales_export_${dateStr}_${timeStr}.csv`;
     const file = new File([csvContent], fileName, { type: 'text/csv' });
 
-    // Try Web Share API first (Best for iOS)
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    // Use Web Share API only on mobile (iOS/Android) — desktop share dialogs just hang
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
-            await navigator.share({
-                files: [file],
-                title: 'Sales Export',
-                text: 'Here is the sales export CSV.'
-            });
+            await navigator.share({ files: [file], title: 'Sales Export', text: 'Here is the sales export CSV.' });
             return;
         } catch (err) {
             console.log('Share failed', err);
         }
     }
 
-    // Fallback to download
+    // Direct download (desktop + share fallback)
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
     a.href = url;
