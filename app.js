@@ -12,6 +12,21 @@ const STATE = {
     deviceId: localStorage.getItem('pos_device_id') || 'POS1'
 };
 
+// --- BUNDLE PRESETS ---
+const BUNDLES = [
+    {
+        sku: 'BDL-001',
+        name: '5 for $20',
+        description: '5 Keytags / Pins / Lanyards',
+        eligibleDesc: 'Keytags • Pins • Lanyards',
+        eligibleCategories: ['Keytags', 'Pins'],
+        category: 'Bundle',
+        bundleQty: 5,
+        price: 20,
+        isBundle: true
+    }
+];
+
 // --- DOM ELEMENTS ---
 const UI = {
     skuSearch: document.getElementById('skuSearch'),
@@ -28,6 +43,8 @@ const UI = {
     cartSection: document.getElementById('cartSection'),
     cartList: document.getElementById('cartList'),
     cartSubtotal: document.getElementById('cartSubtotal'),
+    bundleSavingsRow: document.getElementById('bundleSavingsRow'),
+    bundleSavings: document.getElementById('bundleSavings'),
     cartTotal: document.getElementById('cartTotal'),
     dealPrice: document.getElementById('dealPrice'),
     clearCartBtn: document.getElementById('clearCartBtn'),
@@ -88,6 +105,48 @@ async function init() {
     // Restore payment selection if in cart
     if (STATE.cart.length > 0) {
         UI.cartSection.style.display = 'block';
+    }
+}
+
+// --- BUNDLES ---
+let bundlePromptPending = false;
+let bundleTiersPrompted = {}; // tracks highest tier prompted per bundle sku
+let bundleTiersApplied = {};  // tracks highest tier accepted per bundle sku
+
+function checkBundleOpportunity() {
+    if (bundlePromptPending) return;
+
+    for (const bundle of BUNDLES) {
+        const eligibleItems = STATE.cart.filter(item =>
+            bundle.eligibleCategories.includes(item.category));
+        const eligibleQty = eligibleItems.reduce((sum, i) => sum + i.quantity, 0);
+        const currentTier = Math.floor(eligibleQty / bundle.bundleQty);
+        const lastTier = bundleTiersPrompted[bundle.sku] || 0;
+
+        // Only prompt when we've reached a new bundle tier (e.g. 0→1 at 5 items, 1→2 at 10 items)
+        if (currentTier === 0 || currentTier <= lastTier) continue;
+
+        const eligibleSubtotal = eligibleItems.reduce((sum, i) => sum + i.lineTotal, 0);
+        const bundleEligibleTotal = currentTier * bundle.price;
+        const savings = eligibleSubtotal - bundleEligibleTotal;
+
+        if (savings <= 0) continue;
+
+        const label = currentTier > 1 ? `${currentTier}× "${bundle.name}"` : `"${bundle.name}"`;
+        bundlePromptPending = true;
+        customConfirm(
+            `${eligibleQty} eligible items detected.\nApply ${label}?\n\nRegular: $${eligibleSubtotal.toFixed(2)} → Bundle: $${bundleEligibleTotal.toFixed(2)} (save $${savings.toFixed(2)})`,
+            'Bundle Deal Available'
+        ).then(confirmed => {
+            bundlePromptPending = false;
+            bundleTiersPrompted[bundle.sku] = currentTier;
+            if (confirmed) {
+                bundleTiersApplied[bundle.sku] = currentTier;
+                updateTotals();
+                showToast('Bundle deal applied!');
+            }
+        });
+        break;
     }
 }
 
@@ -280,6 +339,7 @@ UI.addToCartBtn.addEventListener('click', () => {
     UI.searchClear.classList.remove('visible');
     renderInventorySelect();
     showToast('Item added to cart');
+    checkBundleOpportunity();
 });
 
 function saveCart() {
@@ -345,6 +405,8 @@ function clearCart() {
     selectedPayment = null;
     UI.dealPrice.value = '';
     UI.paymentOptions.forEach(el => el.classList.remove('selected'));
+    bundleTiersPrompted = {};
+    bundleTiersApplied = {};
     saveCart();
     renderCart();
 }
@@ -427,14 +489,49 @@ window.deleteDraft = async function (idx) {
 };
 
 // --- PRICING & CHECKOUT ---
+function computeBundleSavings() {
+    let savings = 0;
+    for (const bundle of BUNDLES) {
+        const appliedTier = bundleTiersApplied[bundle.sku] || 0;
+        if (appliedTier === 0) continue;
+
+        const eligibleItems = STATE.cart.filter(i => bundle.eligibleCategories.includes(i.category));
+        const eligibleQty = eligibleItems.reduce((s, i) => s + i.quantity, 0);
+        const eligibleSubtotal = eligibleItems.reduce((s, i) => s + i.lineTotal, 0);
+        if (eligibleQty === 0) continue;
+
+        // Clamp to what's actually in the cart now (in case items were removed)
+        const activeTier = Math.min(appliedTier, Math.floor(eligibleQty / bundle.bundleQty));
+        if (activeTier === 0) continue;
+
+        const coveredFraction = (activeTier * bundle.bundleQty) / eligibleQty;
+        const regularForCovered = eligibleSubtotal * coveredFraction;
+        savings += Math.max(0, regularForCovered - activeTier * bundle.price);
+    }
+    return savings;
+}
+
 function updateTotals() {
     const subtotal = STATE.cart.reduce((sum, item) => sum + item.lineTotal, 0);
     UI.cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
 
     const dealVal = parseFloat(UI.dealPrice.value);
-    const finalTotal = !isNaN(dealVal) && dealVal >= 0 ? dealVal : subtotal;
+    if (!isNaN(dealVal) && dealVal >= 0) {
+        // Manual deal price takes full precedence
+        UI.bundleSavingsRow.style.display = 'none';
+        UI.cartTotal.textContent = `$${dealVal.toFixed(2)}`;
+    } else {
+        const bundleSavings = computeBundleSavings();
+        if (bundleSavings > 0) {
+            UI.bundleSavings.textContent = `-$${bundleSavings.toFixed(2)}`;
+            UI.bundleSavingsRow.style.display = 'flex';
+            UI.cartTotal.textContent = `$${(subtotal - bundleSavings).toFixed(2)}`;
+        } else {
+            UI.bundleSavingsRow.style.display = 'none';
+            UI.cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+        }
+    }
 
-    UI.cartTotal.textContent = `$${finalTotal.toFixed(2)}`;
     checkCheckoutReady();
 }
 
@@ -456,10 +553,12 @@ function checkCheckoutReady() {
 UI.checkoutBtn.addEventListener('click', () => {
     const subtotal = STATE.cart.reduce((sum, item) => sum + item.lineTotal, 0);
     const dealVal = parseFloat(UI.dealPrice.value);
-    const isDeal = !isNaN(dealVal) && dealVal >= 0;
-    const finalTotal = isDeal ? dealVal : subtotal;
+    const manualDeal = !isNaN(dealVal) && dealVal >= 0;
+    const bundleSavings = computeBundleSavings();
+    const isDeal = manualDeal || bundleSavings > 0;
+    const finalTotal = manualDeal ? dealVal : subtotal - bundleSavings;
 
-    // Distribute deal price if applicable
+    // Distribute any discount proportionally across items
     const finalItems = STATE.cart.map(item => {
         let actualPrice = item.lineTotal;
         if (isDeal && subtotal > 0) {

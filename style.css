@@ -500,3 +500,43 @@ select:focus {
     justify-content: flex-end;
     gap: 12px;
 }
+
+/* Bundles */
+.bundle-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.bundle-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.bundle-btn:active {
+    transform: scale(0.97);
+}
+
+.bundle-btn.selected {
+    border-color: var(--success);
+    background: #ecfdf5;
+}
+
+.bundle-btn-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--success);
+    margin-bottom: 2px;
+}
+
+.bundle-btn-desc {
+    font-size: 11px;
+    color: var(--text-light);
+}
