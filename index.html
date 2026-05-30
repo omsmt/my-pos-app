@@ -9,8 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#07070f">
     <title>Convention POS</title>
-    <link rel="apple-touch-icon"
-        href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./icon-192.png">
     <link rel="stylesheet" href="./style.css">
     <!-- BarcodeDetector polyfill for iOS/Safari (uses ZXing-wasm) -->
     <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.9.15/dist/index.js"></script>
@@ -35,10 +35,10 @@
         </div>
     </header>
 
-    <!-- Install Prompt (iOS only) -->
+    <!-- Install Prompt -->
     <div class="install-prompt" id="installPrompt">
-        📱 For the best offline experience on iPhone:<br>
-        Tap the <strong>Share</strong> button → <strong>"Add to Home Screen"</strong>
+        📱 For the best offline experience:<br>
+        <span id="installPromptText">Tap <strong>Share</strong> → <strong>"Add to Home Screen"</strong></span>
     </div>
 
     <!-- ── ADD ITEM CARD ───────────────────────── -->
@@ -345,5 +345,35 @@
 <div class="toast" id="toast"></div>
 
 <script src="./app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+  }
+
+  // Android: capture the beforeinstallprompt event for a native install button
+  let deferredInstallPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const prompt = document.getElementById('installPrompt');
+    const text = document.getElementById('installPromptText');
+    if (prompt && text) {
+      text.innerHTML = '<button onclick="triggerInstall()" style="background:var(--primary);color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:13px;cursor:pointer;">Install App</button>';
+      prompt.style.display = 'block';
+    }
+  });
+
+  function triggerInstall() {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(() => { deferredInstallPrompt = null; });
+  }
+
+  // Hide prompt once installed
+  window.addEventListener('appinstalled', () => {
+    const prompt = document.getElementById('installPrompt');
+    if (prompt) prompt.style.display = 'none';
+  });
+</script>
 </body>
 </html>
