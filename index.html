@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#07070f">
     <title>Convention POS</title>
     <link rel="apple-touch-icon"
         href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
@@ -15,202 +15,329 @@
 </head>
 
 <body>
-    <div class="app-container">
-        <header>
-            <h1>🛒 Convention POS</h1>
+<div class="app-container">
+
+    <!-- ── HEADER ─────────────────────────────── -->
+    <header>
+        <div class="header-brand">
+            <h1>⚡ Convention POS</h1>
             <div class="status-bar">
                 <span><span class="status-dot"></span> Offline Ready</span>
-                <span id="version">v2.0</span>
+                <span id="version">v3.0</span>
             </div>
-        </header>
+        </div>
+        <div class="header-revenue">
+            <span class="revenue-label">Today</span>
+            <span class="revenue-amount" id="headerRevenue">$0.00</span>
+        </div>
+    </header>
 
-        <div class="install-prompt" id="installPrompt">
-            <h3>📱 Install App</h3>
-            <p style="font-size: 14px; color: #666; margin: 8px 0;">
-                For the best offline experience on iPhone:
-                <br>1. Tap the <strong>Share</strong> button below
-                <br>2. Select <strong>"Add to Home Screen"</strong>
-            </p>
+    <!-- Install Prompt (iOS only) -->
+    <div class="install-prompt" id="installPrompt">
+        📱 For the best offline experience on iPhone:<br>
+        Tap the <strong>Share</strong> button → <strong>"Add to Home Screen"</strong>
+    </div>
+
+    <!-- ── ADD ITEM CARD ───────────────────────── -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">New Item</h2>
+            <button class="btn btn-sm oos-toggle-btn" id="oosToggleBtn">Stock: ON</button>
         </div>
 
-        <!-- New Sale Section -->
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">New Item</h2>
-                <button class="btn btn-sm btn-outline" id="modeToggleBtn">Switch to Manual</button>
-            </div>
+        <!-- Mode Tabs -->
+        <div class="mode-tabs">
+            <button class="mode-tab active" id="searchModeTab">🔍 Search</button>
+            <button class="mode-tab" id="manualModeTab">✏️ Manual</button>
+        </div>
 
-            <div id="searchMode">
-
-                <div class="form-group">
-                    <label>Search Item</label>
-                    <div class="search-wrapper">
-                        <span class="search-icon">🔍</span>
-                        <input type="text" id="skuSearch" class="search-input" placeholder="SKU or Name..."
-                            autocomplete="off" inputmode="search">
+        <!-- Search Mode -->
+        <div id="searchMode">
+            <div class="form-group">
+                <div class="search-wrapper">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="skuSearch" class="search-input"
+                        placeholder="SKU, name or category..."
+                        autocomplete="off" inputmode="search">
+                    <div class="search-actions">
                         <button class="search-clear" id="searchClear">✕</button>
+                        <button class="scan-btn" id="scanBtn" title="Scan barcode">📷</button>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <select id="skuSelect">
-                        <option value="">Select from list...</option>
-                    </select>
-                </div>
-
-                <div class="item-preview" id="itemPreview">
-                    <div class="preview-row">
-                        <span class="preview-label">Description</span>
-                        <span class="preview-value" id="previewDesc">-</span>
-                    </div>
-                    <div class="preview-row">
-                        <span class="preview-label">Category</span>
-                        <span class="preview-value" id="previewCat">-</span>
-                    </div>
-                    <div class="preview-row">
-                        <span class="preview-label">Cost</span>
-                        <span class="preview-value" id="previewCost">-</span>
-                    </div>
-                    <div class="preview-row">
-                        <span class="preview-label">Price</span>
-                        <input type="number" id="previewCostInput" class="search-input"
-                            style="width: 100px; padding: 4px 8px; font-size: 14px;" placeholder="0.00"
-                            inputmode="decimal">
-                    </div>
-                    <div class="preview-row">
-                        <span class="preview-label">Stock</span>
-                        <span class="preview-value" id="previewStock">-</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <div id="manualMode" style="display: none;">
-                <div class="form-group">
-                    <label>Item Description</label>
-                    <input type="text" id="manualDesc" class="search-input" placeholder="e.g. Custom Item">
-                </div>
-                <div class="form-group">
-                    <label>Price</label>
-                    <input type="number" id="manualPrice" class="search-input" placeholder="0.00" inputmode="decimal">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Quantity</label>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-outline" style="width: 50px;" onclick="adjustQty(-1)">-</button>
-                    <input type="number" id="quantity" value="1" min="1" style="text-align: center;"
-                        inputmode="numeric">
-                    <button class="btn btn-outline" style="width: 50px;" onclick="adjustQty(1)">+</button>
-                </div>
+                <select id="skuSelect">
+                    <option value="">Select from list...</option>
+                </select>
             </div>
 
-            <button class="btn btn-primary" id="addToCartBtn" disabled>
-                Add to Cart
-            </button>
-
-            <!-- Cart Section -->
-            <div class="card" id="cartSection" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Current Cart</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-sm btn-outline" id="saveDraftBtn">💾 Save Draft</button>
-                        <button class="btn btn-sm btn-danger" id="clearCartBtn">Clear</button>
-                    </div>
+            <!-- Item Preview -->
+            <div class="item-preview" id="itemPreview">
+                <div class="preview-row">
+                    <span class="preview-label">Description</span>
+                    <span class="preview-value" id="previewDesc">-</span>
                 </div>
-
-                <div class="cart-list" id="cartList"></div>
-
-                <div class="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="cartSubtotal">$0.00</span>
-                    </div>
-                    <div class="summary-row" id="bundleSavingsRow" style="display: none;">
-                        <span>Bundle Savings</span>
-                        <span id="bundleSavings" style="color: var(--success);">-$0.00</span>
-                    </div>
-                    <div class="form-group" style="margin-top: 12px;">
-                        <label>Negotiated Deal Price (Optional)</label>
-                        <input type="number" id="dealPrice" placeholder="Enter final total..." inputmode="decimal">
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span id="cartTotal">$0.00</span>
-                    </div>
+                <div class="preview-row">
+                    <span class="preview-label">Category</span>
+                    <span class="preview-value" id="previewCat">-</span>
                 </div>
+                <div class="preview-row">
+                    <span class="preview-label">Cost</span>
+                    <span class="preview-value" id="previewCost">-</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">Price</span>
+                    <input type="number" id="previewCostInput" class="price-inline-input"
+                        placeholder="0.00" inputmode="decimal">
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">Stock</span>
+                    <span id="previewStock">-</span>
+                </div>
+            </div>
+        </div>
 
+        <!-- Manual Mode -->
+        <div id="manualMode" style="display: none;">
+            <div class="form-group">
+                <label>Item Description</label>
+                <input type="text" id="manualDesc" placeholder="e.g. Custom Item">
+            </div>
+            <div class="form-group">
+                <label>Price ($)</label>
+                <input type="number" id="manualPrice" placeholder="0.00" inputmode="decimal">
+            </div>
+        </div>
+
+        <!-- Quantity -->
+        <div class="form-group">
+            <label>Quantity</label>
+            <div class="qty-controls">
+                <button class="qty-btn" onclick="adjustQty(-1)">−</button>
+                <input type="number" id="quantity" class="qty-input" value="1" min="1" inputmode="numeric">
+                <button class="qty-btn" onclick="adjustQty(1)">+</button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" id="addToCartBtn" disabled>
+            + Add to Cart
+        </button>
+    </div>
+
+    <!-- ── CART CARD ───────────────────────────── -->
+    <div class="card" id="cartSection" style="display: none;">
+        <div class="card-header">
+            <h2 class="card-title">Cart</h2>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-sm btn-ghost" id="saveDraftBtn">💾 Draft</button>
+                <button class="btn btn-sm btn-danger" id="clearCartBtn">Clear</button>
+            </div>
+        </div>
+
+        <div class="cart-list" id="cartList"></div>
+
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cartSubtotal">$0.00</span>
+            </div>
+            <div class="summary-row" id="bundleSavingsRow" style="display: none;">
+                <span>Bundle Savings</span>
+                <span class="summary-savings" id="bundleSavings">-$0.00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Negotiated Deal Price (optional)</label>
+            <div class="deal-wrapper">
+                <span class="deal-prefix">$</span>
+                <input type="number" id="dealPrice" class="deal-input"
+                    placeholder="Enter final total..." inputmode="decimal">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Payment Method</label>
+            <div class="payment-grid">
+                <div class="payment-option" data-method="cash">💵 Cash</div>
+                <div class="payment-option" data-method="payid">📱 PayID</div>
+            </div>
+        </div>
+
+        <button class="btn btn-success" id="checkoutBtn" disabled>
+            ✓ Complete Sale
+        </button>
+    </div>
+
+    <!-- ── DRAFTS CARD ─────────────────────────── -->
+    <div class="card" id="draftsSection" style="display: none;">
+        <div class="card-header">
+            <h2 class="card-title">Saved Drafts</h2>
+        </div>
+        <div id="draftsList"></div>
+    </div>
+
+    <!-- ── SALES HISTORY CARD ─────────────────── -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Today's Sales</h2>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <button class="btn btn-sm btn-ghost" id="inventoryBtn">📦</button>
+                <button class="btn btn-sm btn-ghost" id="settingsBtn">⚙️</button>
+                <button class="btn btn-sm btn-ghost" id="summaryBtn">📊</button>
+                <button class="btn btn-sm btn-ghost" id="exportBtn">📤</button>
+                <button class="btn btn-sm btn-ghost" id="resetBtn"
+                    style="color: var(--danger);">🗑</button>
+            </div>
+        </div>
+
+        <div class="sales-list" id="salesList">
+            <div class="empty-state">
+                <span class="empty-icon">🛒</span>
+                No sales yet today
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat">
+                <span class="stat-value" id="totalCount">0</span>
+                <span class="stat-label">Sales</span>
+            </div>
+            <div class="stat">
+                <span class="stat-value" id="totalRevenue" style="color: var(--gold);">$0.00</span>
+                <span class="stat-label">Revenue</span>
+            </div>
+        </div>
+
+        <div id="summarySection"></div>
+    </div>
+
+</div><!-- /app-container -->
+
+<!-- ── CUSTOM MODAL ──────────────────────────────── -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="modalCard">
+        <h3 class="modal-title" id="modalTitle">Alert</h3>
+        <p class="modal-message" id="modalMessage"></p>
+        <input type="text" class="modal-input" id="modalInput">
+        <div class="modal-actions">
+            <button class="btn btn-outline btn-sm" id="modalCancelBtn" style="display: none;">Cancel</button>
+            <button class="btn btn-primary btn-sm" id="modalConfirmBtn">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── CHECKOUT REVIEW MODAL ─────────────────────── -->
+<div class="modal-overlay" id="reviewModal">
+    <div class="modal-card">
+        <h3 class="modal-title">Review Order</h3>
+        <div class="review-items" id="reviewItemsList"></div>
+        <div class="review-total-row">
+            <span>Total</span>
+            <span id="reviewTotal">$0.00</span>
+        </div>
+        <span class="review-payment-badge" id="reviewPaymentBadge">💵 Cash</span>
+        <div class="modal-actions">
+            <button class="btn btn-outline btn-sm" id="reviewCancelBtn">Back</button>
+            <button class="btn btn-success btn-sm" id="reviewConfirmBtn">Confirm Sale</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── SCAN MODAL ────────────────────────────────── -->
+<div class="modal-overlay" id="scanModal">
+    <div class="modal-card">
+        <h3 class="modal-title">Scan Barcode</h3>
+        <div class="scan-frame">
+            <video id="scanVideo" autoplay playsinline muted></video>
+            <div class="scan-crosshair"></div>
+        </div>
+        <div class="scan-status scanning" id="scanStatus">Point camera at barcode...</div>
+        <div class="modal-actions">
+            <button class="btn btn-outline btn-sm" id="scanCancelBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── INVENTORY EDITOR MODAL ─────────────────────── -->
+<div class="modal-overlay" id="invModal">
+    <div class="modal-card inv-modal-card">
+
+        <!-- List View -->
+        <div class="inv-panel" id="invListView">
+            <div class="inv-modal-header">
+                <h3 class="modal-title">Inventory</h3>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+                    <button class="btn btn-sm btn-ghost" id="invExportJsonBtn">📤 JSON</button>
+                    <button class="btn btn-sm btn-ghost" id="invResetBtn" style="color:var(--danger);">↺ Reset</button>
+                    <button class="btn btn-sm btn-primary" id="invAddBtn">+ Add</button>
+                    <button class="btn btn-sm btn-ghost" id="invCloseBtn">✕</button>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:8px;flex-shrink:0;">
+                <input type="text" id="invSearch" placeholder="Search SKU, name or category…"
+                    autocomplete="off" inputmode="search">
+            </div>
+            <div id="invItemCount" style="font-size:11px;color:var(--text-dim);margin-bottom:8px;flex-shrink:0;"></div>
+            <div class="inv-list" id="invList"></div>
+        </div>
+
+        <!-- Form View (Add / Edit) -->
+        <div class="inv-panel" id="invFormView" style="display:none;">
+            <div class="inv-modal-header" style="flex-shrink:0;">
+                <h3 class="modal-title" id="invFormTitle">Add Item</h3>
+                <button class="btn btn-sm btn-ghost" id="invFormBackBtn">← Back</button>
+            </div>
+            <div class="inv-form-scroll">
                 <div class="form-group">
-                    <label>Payment Method</label>
-                    <div class="payment-grid">
-                        <div class="payment-option" data-method="cash">💵 Cash</div>
-                        <div class="payment-option" data-method="payid">💳 PayID</div>
+                    <label>SKU *</label>
+                    <input type="text" id="invFieldSku" placeholder="e.g. KT-001" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Description *</label>
+                    <input type="text" id="invFieldDesc" placeholder="Item name / description" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" id="invFieldCat" placeholder="e.g. Keytags"
+                        list="invCatList" autocomplete="off">
+                    <datalist id="invCatList"></datalist>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Price ($) *</label>
+                        <input type="number" id="invFieldPrice" placeholder="0.00"
+                            inputmode="decimal" min="0" step="0.01">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Cost ($)</label>
+                        <input type="number" id="invFieldCost" placeholder="0.00"
+                            inputmode="decimal" min="0" step="0.01">
                     </div>
                 </div>
-
-                <button class="btn btn-success" id="checkoutBtn" disabled>
-                    Complete Sale
-                </button>
-
-            </div>
-
-            <!-- Drafts Section -->
-            <div class="card" id="draftsSection" style="display: none;">
-                <div class="card-header">
-                    <h2 class="card-title">Saved Drafts</h2>
+                <div class="form-group" style="margin-top:14px;">
+                    <label>Quantity</label>
+                    <input type="number" id="invFieldQty" placeholder="Leave blank for unlimited"
+                        inputmode="numeric" min="0">
                 </div>
-                <div class="cart-list" id="draftsList"></div>
-            </div>
-
-            <!-- History Section -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">Today's Sales</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-sm btn-outline" id="settingsBtn">⚙️</button>
-                        <button class="btn btn-sm btn-outline" id="summaryBtn">📊 Summary</button>
-                        <button class="btn btn-sm btn-outline" id="exportBtn">📤 Export</button>
-                        <button class="btn btn-sm btn-outline"
-                            style="color: var(--danger); border-color: var(--danger);" id="resetBtn">Reset</button>
-                    </div>
-                </div>
-
-                <div class="sales-list" id="salesList">
-                    <div style="text-align: center; padding: 20px; color: #999;">No sales today</div>
-                </div>
-
-                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
-                    <div class="summary-row">
-                        <span>Total Transactions</span>
-                        <span id="totalCount" style="font-weight: 600;">0</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Total Revenue</span>
-                        <span id="totalRevenue" style="font-weight: 600; color: var(--primary);">$0.00</span>
-                    </div>
-                </div>
-
-                <div id="summarySection" style="display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"></div>
-            </div>
-        </div>
-
-        <!-- Custom Modals -->
-        <div class="modal-overlay" id="modalOverlay">
-            <div class="modal-card" id="modalCard">
-                <h3 class="modal-title" id="modalTitle">Settings</h3>
-                <p class="modal-message" id="modalMessage">Enter Device ID:</p>
-                <input type="text" class="modal-input" id="modalInput">
-                <div class="modal-actions">
-                    <button class="btn btn-outline" id="modalCancelBtn" style="display: none;">Cancel</button>
-                    <button class="btn btn-primary" id="modalConfirmBtn">OK</button>
+                <button class="btn btn-primary" id="invSaveItemBtn">Save Item</button>
+                <div id="invDeleteRow" style="margin-top:10px;display:none;">
+                    <button class="btn btn-outline" id="invDeleteItemBtn"
+                        style="color:var(--danger);border-color:var(--danger);">Delete Item</button>
                 </div>
             </div>
         </div>
 
-        <div class="toast" id="toast">Item added to cart</div>
+    </div>
+</div>
 
-        <script src="./app.js"></script>
+<div class="toast" id="toast"></div>
+
+<script src="./app.js"></script>
 </body>
-
 </html>
