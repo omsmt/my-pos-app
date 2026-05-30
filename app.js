@@ -61,6 +61,7 @@ const UI = {
     summarySection: document.getElementById('summarySection'),
     toast: document.getElementById('toast'),
     installPrompt: document.getElementById('installPrompt'),
+    oosToggleBtn: document.getElementById('oosToggleBtn'),
     searchModeTab: document.getElementById('searchModeTab'),
     manualModeTab: document.getElementById('manualModeTab'),
     searchMode: document.getElementById('searchMode'),
@@ -86,16 +87,50 @@ const UI = {
     scanModal: document.getElementById('scanModal'),
     scanVideo: document.getElementById('scanVideo'),
     scanStatus: document.getElementById('scanStatus'),
-    scanCancelBtn: document.getElementById('scanCancelBtn')
+    scanCancelBtn: document.getElementById('scanCancelBtn'),
+    // Inventory editor
+    inventoryBtn: document.getElementById('inventoryBtn'),
+    invModal: document.getElementById('invModal'),
+    invSearch: document.getElementById('invSearch'),
+    invList: document.getElementById('invList'),
+    invItemCount: document.getElementById('invItemCount'),
+    invListView: document.getElementById('invListView'),
+    invFormView: document.getElementById('invFormView'),
+    invFormTitle: document.getElementById('invFormTitle'),
+    invAddBtn: document.getElementById('invAddBtn'),
+    invCloseBtn: document.getElementById('invCloseBtn'),
+    invExportJsonBtn: document.getElementById('invExportJsonBtn'),
+    invResetBtn: document.getElementById('invResetBtn'),
+    invFormBackBtn: document.getElementById('invFormBackBtn'),
+    invFieldSku: document.getElementById('invFieldSku'),
+    invFieldDesc: document.getElementById('invFieldDesc'),
+    invFieldCat: document.getElementById('invFieldCat'),
+    invCatList: document.getElementById('invCatList'),
+    invFieldPrice: document.getElementById('invFieldPrice'),
+    invFieldCost: document.getElementById('invFieldCost'),
+    invFieldQty: document.getElementById('invFieldQty'),
+    invSaveItemBtn: document.getElementById('invSaveItemBtn'),
+    invDeleteRow: document.getElementById('invDeleteRow'),
+    invDeleteItemBtn: document.getElementById('invDeleteItemBtn')
 };
 
 let selectedItem = null;
 let selectedPayment = null;
 let isManualMode = false;
+let showOosIndicators = localStorage.getItem('pos_oos') !== 'false';
 
 // --- INITIALIZATION ---
 
 async function loadInventory() {
+    const saved = localStorage.getItem('pos_inventory');
+    if (saved) {
+        try {
+            STATE.inventory = JSON.parse(saved);
+            return;
+        } catch (e) {
+            localStorage.removeItem('pos_inventory');
+        }
+    }
     try {
         const response = await fetch('./inventory.json');
         if (!response.ok) throw new Error('Failed to load inventory');
@@ -106,8 +141,22 @@ async function loadInventory() {
     }
 }
 
+function applyOosToggle() {
+    UI.oosToggleBtn.textContent = showOosIndicators ? 'Stock: ON' : 'Stock: OFF';
+    UI.oosToggleBtn.classList.toggle('off', !showOosIndicators);
+}
+
+UI.oosToggleBtn.addEventListener('click', () => {
+    showOosIndicators = !showOosIndicators;
+    localStorage.setItem('pos_oos', showOosIndicators);
+    applyOosToggle();
+    renderInventorySelect();
+    refreshStockDisplay();
+});
+
 async function init() {
     await loadInventory();
+    applyOosToggle();
     renderInventorySelect();
     renderCart();
     renderDrafts();
@@ -182,29 +231,37 @@ function buildStockCache() {
     STATE.cart.forEach(item => {
         cartMap[item.sku] = (cartMap[item.sku] || 0) + item.quantity;
     });
-    return { soldMap, cartMap };
+    const draftMap = {};
+    STATE.drafts.forEach(draft => {
+        draft.items.forEach(item => {
+            draftMap[item.sku] = (draftMap[item.sku] || 0) + item.quantity;
+        });
+    });
+    return { soldMap, cartMap, draftMap };
 }
 
 function renderInventorySelect(items = STATE.inventory) {
-    const { soldMap, cartMap } = buildStockCache();
+    const { soldMap, cartMap, draftMap } = buildStockCache();
 
-    // Sort: available items first, OOS at bottom
-    const sorted = [...items].sort((a, b) => {
-        const stockA = a.quantity == null ? 999 : Math.max(0, a.quantity - (soldMap[a.sku] || 0) - (cartMap[a.sku] || 0));
-        const stockB = b.quantity == null ? 999 : Math.max(0, b.quantity - (soldMap[b.sku] || 0) - (cartMap[b.sku] || 0));
-        if (stockA === 0 && stockB !== 0) return 1;
-        if (stockA !== 0 && stockB === 0) return -1;
-        return 0;
-    });
+    const calcStock = (item) => item.quantity == null
+        ? 999
+        : Math.max(0, item.quantity - (soldMap[item.sku] || 0) - (cartMap[item.sku] || 0) - (draftMap[item.sku] || 0));
+
+    const sorted = showOosIndicators
+        ? [...items].sort((a, b) => {
+            const sA = calcStock(a), sB = calcStock(b);
+            if (sA === 0 && sB !== 0) return 1;
+            if (sA !== 0 && sB === 0) return -1;
+            return 0;
+          })
+        : [...items];
 
     UI.skuSelect.innerHTML = '<option value="">Select from list...</option>';
 
     for (const item of sorted) {
-        const stock = item.quantity == null
-            ? null
-            : Math.max(0, item.quantity - (soldMap[item.sku] || 0) - (cartMap[item.sku] || 0));
-        const isOOS = stock === 0;
-        const isLow = stock !== null && stock > 0 && stock <= 2;
+        const stock = item.quantity == null ? null : calcStock(item);
+        const isOOS = showOosIndicators && stock === 0;
+        const isLow = showOosIndicators && stock !== null && stock > 0 && stock <= 2;
 
         const option = document.createElement('option');
         option.value = item.sku;
@@ -258,7 +315,12 @@ function getAvailableStock(sku) {
         .filter(i => i.sku === sku)
         .reduce((s, i) => s + i.quantity, 0);
 
-    return Math.max(0, item.quantity - soldInSales - inCart);
+    const inDrafts = STATE.drafts
+        .flatMap(d => d.items)
+        .filter(i => i.sku === sku)
+        .reduce((s, i) => s + i.quantity, 0);
+
+    return Math.max(0, item.quantity - soldInSales - inCart - inDrafts);
 }
 
 function refreshStockDisplay() {
@@ -266,6 +328,8 @@ function refreshStockDisplay() {
     const stock = getAvailableStock(selectedItem.sku);
     if (stock === null) {
         UI.previewStock.innerHTML = '<span class="stock-none">—</span>';
+    } else if (!showOosIndicators) {
+        UI.previewStock.innerHTML = `<span class="stock-none">${stock}</span>`;
     } else if (stock === 0) {
         UI.previewStock.innerHTML = '<span class="stock-badge stock-out">Out of Stock</span>';
     } else if (stock <= 2) {
@@ -398,6 +462,11 @@ function saveCart() {
     localStorage.setItem('pos_cart', JSON.stringify(STATE.cart));
 }
 
+function saveInventory() {
+    localStorage.setItem('pos_inventory', JSON.stringify(STATE.inventory));
+    renderInventorySelect();
+}
+
 function renderCart() {
     if (STATE.cart.length === 0) {
         UI.cartSection.style.display = 'none';
@@ -487,6 +556,7 @@ UI.saveDraftBtn.addEventListener('click', async () => {
 
     clearCart();
     renderDrafts();
+    renderInventorySelect();
     showToast('Draft saved!');
 });
 
@@ -532,6 +602,8 @@ window.loadDraft = async function (idx) {
     saveCart();
     renderCart();
     renderDrafts();
+    renderInventorySelect();
+    refreshStockDisplay();
     showToast('Draft loaded!');
 };
 
@@ -540,6 +612,8 @@ window.deleteDraft = async function (idx) {
     STATE.drafts.splice(idx, 1);
     localStorage.setItem('pos_drafts', JSON.stringify(STATE.drafts));
     renderDrafts();
+    renderInventorySelect();
+    refreshStockDisplay();
 };
 
 // --- PRICING & CHECKOUT ---
@@ -986,13 +1060,195 @@ UI.exportBtn.addEventListener('click', async () => {
         }
     }
 
+    downloadBlob(file, fileName);
+});
+
+// --- INVENTORY EDITOR ---
+let invEditSku = null;
+
+UI.inventoryBtn.addEventListener('click', () => {
+    showInvListView();
+    UI.invModal.classList.add('active');
+});
+
+UI.invCloseBtn.addEventListener('click', () => UI.invModal.classList.remove('active'));
+UI.invAddBtn.addEventListener('click', () => showInvFormView(null));
+UI.invFormBackBtn.addEventListener('click', showInvListView);
+
+UI.invSearch.addEventListener('input', () => renderInvList());
+
+UI.invList.addEventListener('click', e => {
+    const btn = e.target.closest('.inv-edit-btn');
+    if (btn) showInvFormView(btn.closest('.inv-item-row').dataset.sku);
+});
+
+UI.invSaveItemBtn.addEventListener('click', saveInvItem);
+UI.invDeleteItemBtn.addEventListener('click', deleteInvItem);
+UI.invExportJsonBtn.addEventListener('click', exportInventoryJSON);
+UI.invResetBtn.addEventListener('click', resetInventory);
+
+function showInvListView() {
+    UI.invSearch.value = '';
+    UI.invListView.style.display = 'flex';
+    UI.invFormView.style.display = 'none';
+    renderInvList();
+}
+
+function showInvFormView(sku) {
+    invEditSku = sku || null;
+    UI.invListView.style.display = 'none';
+    UI.invFormView.style.display = 'flex';
+    UI.invFormTitle.textContent = sku ? 'Edit Item' : 'Add Item';
+
+    const cats = [...new Set(STATE.inventory.map(i => i.category).filter(Boolean))].sort();
+    UI.invCatList.innerHTML = cats.map(c => `<option value="${escapeHtml(c)}">`).join('');
+
+    if (sku) {
+        const item = STATE.inventory.find(i => i.sku === sku);
+        UI.invFieldSku.value = item.sku;
+        UI.invFieldSku.disabled = true;
+        UI.invFieldDesc.value = item.description;
+        UI.invFieldCat.value = item.category || '';
+        UI.invFieldPrice.value = item.price != null ? item.price : '';
+        UI.invFieldCost.value = item.cost != null ? item.cost : '';
+        UI.invFieldQty.value = item.quantity != null ? item.quantity : '';
+        UI.invDeleteRow.style.display = 'block';
+    } else {
+        UI.invFieldSku.value = '';
+        UI.invFieldSku.disabled = false;
+        UI.invFieldDesc.value = '';
+        UI.invFieldCat.value = '';
+        UI.invFieldPrice.value = '';
+        UI.invFieldCost.value = '';
+        UI.invFieldQty.value = '';
+        UI.invDeleteRow.style.display = 'none';
+        UI.invFieldSku.focus();
+    }
+}
+
+function renderInvList() {
+    const term = UI.invSearch.value.toLowerCase().trim();
+    const items = term
+        ? STATE.inventory.filter(i =>
+            i.sku.toLowerCase().includes(term) ||
+            i.description.toLowerCase().includes(term) ||
+            (i.category || '').toLowerCase().includes(term))
+        : STATE.inventory;
+
+    UI.invItemCount.textContent = `${items.length} of ${STATE.inventory.length} items`;
+
+    if (items.length === 0) {
+        UI.invList.innerHTML = '<div class="empty-state"><span class="empty-icon">📦</span>No items found</div>';
+        return;
+    }
+
+    UI.invList.innerHTML = items.map(item => `
+        <div class="inv-item-row" data-sku="${escapeHtml(item.sku)}">
+            <div class="inv-item-info">
+                <div class="inv-item-name">${escapeHtml(item.description)}</div>
+                <div class="inv-item-meta">
+                    ${escapeHtml(item.sku)} · ${escapeHtml(item.category || '—')} · $${(item.price || 0).toFixed(2)}${item.quantity != null ? ` · Qty: ${item.quantity}` : ''}
+                </div>
+            </div>
+            <button class="btn btn-sm btn-ghost inv-edit-btn">Edit</button>
+        </div>`).join('');
+}
+
+function saveInvItem() {
+    const sku = UI.invFieldSku.value.trim().toUpperCase();
+    const desc = UI.invFieldDesc.value.trim();
+    const cat = UI.invFieldCat.value.trim();
+    const price = parseFloat(UI.invFieldPrice.value);
+    const costRaw = UI.invFieldCost.value.trim();
+    const qtyRaw = UI.invFieldQty.value.trim();
+
+    if (!sku) { showToast('SKU is required'); return; }
+    if (!desc) { showToast('Description is required'); return; }
+    if (isNaN(price) || price < 0) { showToast('Enter a valid price'); return; }
+
+    if (!invEditSku && STATE.inventory.find(i => i.sku.toUpperCase() === sku)) {
+        showToast(`SKU "${sku}" already exists`);
+        return;
+    }
+
+    const item = {
+        sku,
+        description: desc,
+        category: cat || 'Uncategorized',
+        price,
+        cost: costRaw !== '' ? parseFloat(costRaw) : null,
+        quantity: qtyRaw !== '' ? parseInt(qtyRaw, 10) : null
+    };
+
+    if (invEditSku) {
+        const idx = STATE.inventory.findIndex(i => i.sku === invEditSku);
+        if (idx !== -1) STATE.inventory[idx] = item;
+    } else {
+        STATE.inventory.push(item);
+    }
+
+    saveInventory();
+    showToast(invEditSku ? 'Item updated ✓' : 'Item added ✓');
+    showInvListView();
+}
+
+async function deleteInvItem() {
+    if (!invEditSku) return;
+    if (await customConfirm(`Delete "${UI.invFieldDesc.value}"?\nThis cannot be undone.`, 'Delete Item')) {
+        STATE.inventory = STATE.inventory.filter(i => i.sku !== invEditSku);
+        saveInventory();
+        showToast('Item deleted');
+        showInvListView();
+    }
+}
+
+function exportInventoryJSON() {
+    const json = JSON.stringify(STATE.inventory, null, 2);
+    const date = new Date().toISOString().split('T')[0];
+    const fileName = `inventory_${date}.json`;
+    const file = new File([json], fileName, { type: 'application/json' });
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: 'Inventory Export' }).catch(() => downloadBlob(file, fileName));
+        return;
+    }
+    downloadBlob(file, fileName);
+}
+
+async function resetInventory() {
+    if (!await customConfirm(
+        'Reset inventory to the original inventory.json?\n\nAll edits will be lost.',
+        'Reset Inventory'
+    )) return;
+    localStorage.removeItem('pos_inventory');
+    try {
+        const res = await fetch('./inventory.json');
+        if (!res.ok) throw new Error();
+        STATE.inventory = await res.json();
+        renderInvList();
+        renderInventorySelect();
+        showToast('Inventory reset ✓');
+    } catch {
+        showToast('⚠️ Could not fetch inventory.json');
+    }
+}
+
+function escapeHtml(str) {
+    return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function downloadBlob(file, fileName) {
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
     a.href = url;
     a.download = fileName;
     a.click();
     URL.revokeObjectURL(url);
-});
+}
 
 // --- BARCODE SCAN ---
 let scanStream = null;

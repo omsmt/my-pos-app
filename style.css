@@ -1025,3 +1025,95 @@ select {
 }
 
 .summary-product-row:last-child { border-bottom: none; }
+
+/* ── OOS TOGGLE ───────────────────────────────── */
+.oos-toggle-btn {
+    background: var(--success-dim);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    width: auto;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.oos-toggle-btn.off {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-dim);
+    border-color: var(--border);
+}
+
+/* ── INVENTORY EDITOR MODAL ───────────────────── */
+#invModal {
+    z-index: 1900;
+}
+
+.inv-modal-card {
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: max(20px, var(--safe-bottom));
+}
+
+.inv-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.inv-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.inv-list {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    min-height: 0;
+}
+
+.inv-form-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.inv-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.inv-item-row:last-child { border-bottom: none; }
+
+.inv-item-info { flex: 1; min-width: 0; }
+
+.inv-item-name {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+
+.inv-item-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+}
