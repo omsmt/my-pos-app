@@ -132,7 +132,7 @@ async function loadInventory() {
         }
     }
     try {
-        const response = await fetch('./inventory.json');
+        const response = await fetch('./inventory.json?v=' + Date.now());
         if (!response.ok) throw new Error('Failed to load inventory');
         STATE.inventory = await response.json();
     } catch (error) {
@@ -499,6 +499,12 @@ function renderCart() {
     }).join('');
 
     updateTotals();
+    updateZeroPriceWarning();
+}
+
+function updateZeroPriceWarning() {
+    const hasZeroPrice = STATE.cart.some(item => item.unitPrice === 0);
+    document.getElementById('zeroPriceWarning').style.display = hasZeroPrice ? 'block' : 'none';
 }
 
 window.removeFromCart = function (idx) {
@@ -1258,10 +1264,18 @@ let barcodeDetector = null;
 UI.scanBtn.addEventListener('click', openScanModal);
 UI.scanCancelBtn.addEventListener('click', closeScanModal);
 
+function getBarcodeDetectorClass() {
+    // Prefer native, fall back to polyfill loaded via CDN
+    if ('BarcodeDetector' in window) return window.BarcodeDetector;
+    if (window.BarcodeDetectorPolyfill) return window.BarcodeDetectorPolyfill;
+    return null;
+}
+
 function openScanModal() {
-    if (!('BarcodeDetector' in window)) {
+    const DetectorClass = getBarcodeDetectorClass();
+    if (!DetectorClass) {
         customAlert(
-            'Barcode scanning is not supported in this browser.\n\nUse Chrome on Android or update your browser.\n\niOS Safari: use Chrome for iOS instead.',
+            'Barcode scanning is not supported in this browser.\n\nPlease try refreshing the app, or use a supported browser.',
             'Scanner Unavailable'
         );
         return;
@@ -1277,7 +1291,7 @@ function openScanModal() {
         scanStream = stream;
         UI.scanVideo.srcObject = stream;
 
-        barcodeDetector = new BarcodeDetector({ formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'data_matrix'] });
+        barcodeDetector = new DetectorClass({ formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'data_matrix'] });
         UI.scanStatus.textContent = 'Point camera at barcode...';
 
         scanAnimFrame = requestAnimationFrame(scanFrame);

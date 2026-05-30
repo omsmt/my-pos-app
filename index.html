@@ -12,6 +12,9 @@
     <link rel="apple-touch-icon"
         href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==">
     <link rel="stylesheet" href="./style.css">
+    <!-- BarcodeDetector polyfill for iOS/Safari (uses ZXing-wasm) -->
+    <script src="https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.9.15/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@0.9.21/dist/index.js"></script>
 </head>
 
 <body>
@@ -169,6 +172,9 @@
             </div>
         </div>
 
+        <div id="zeroPriceWarning" class="zero-price-warning" style="display:none;">
+            ⚠️ One or more items are priced at $0
+        </div>
         <button class="btn btn-success" id="checkoutBtn" disabled>
             ✓ Complete Sale
         </button>

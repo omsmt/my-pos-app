@@ -370,6 +370,18 @@ select {
 .stock-out  { background: var(--danger-dim);  color: var(--danger);  }
 .stock-none { color: var(--text-dim); font-size: 12px; }
 
+.zero-price-warning {
+    background: var(--warning-dim);
+    color: var(--warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: var(--r-sm);
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 /* ── QTY CONTROLS ─────────────────────────────── */
 .qty-controls {
     display: flex;
