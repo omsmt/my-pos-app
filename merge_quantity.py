@@ -9,8 +9,8 @@ import zipfile
 import xml.etree.ElementTree as ET
 import json
 
-XLSX_FILE = 'master_list_final_v6.xlsx'
-JSON_FILE = 'inventory_2.json'
+XLSX_FILE = 'Updated_Master_SKU_List_V2_PRICES.xlsx'
+JSON_FILE = 'inventory.json'
 NS = {'ns': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 
 
@@ -51,6 +51,13 @@ def read_xlsx_rows(path):
         cost_col = header.index('Cost')
         qty_col = header.index('Quantity')
 
+        # Locate price column by trying common names (case-insensitive)
+        header_lower = [h.lower() if h else '' for h in header]
+        price_col_idx = next(
+            (i for i in range(len(header_lower)) if header_lower[i] in ('price', 'prices')),
+            None
+        )
+
         col_map = {
             'sku': idx_to_col(sku_col),
             'description': idx_to_col(desc_col),
@@ -58,6 +65,8 @@ def read_xlsx_rows(path):
             'cost': idx_to_col(cost_col),
             'quantity': idx_to_col(qty_col),
         }
+        if price_col_idx is not None:
+            col_map['price'] = idx_to_col(price_col_idx)
 
         for row in rows[1:]:
             cell_map = {}
@@ -79,6 +88,7 @@ def read_xlsx_rows(path):
                 'category': get('category') or '',
                 'cost': get('cost'),
                 'quantity': get('quantity'),
+                'price': get('price') if 'price' in col_map else None,
             })
 
     return rows_data
@@ -109,11 +119,20 @@ def merge(xlsx_rows, json_path):
         except (ValueError, TypeError):
             cost = 0.0
 
+        try:
+            price = float(row['price']) if row['price'] is not None else None
+        except (ValueError, TypeError):
+            price = None
+
         if sku in existing:
             existing[sku]['quantity'] = qty
             existing[sku]['cost'] = cost
             existing[sku]['description'] = row['description']
             existing[sku]['category'] = row['category']
+            if price is not None:
+                existing[sku]['price'] = price
+            elif 'price' not in existing[sku]:
+                existing[sku]['price'] = 0
             updated += 1
         else:
             inventory.append({
@@ -121,7 +140,7 @@ def merge(xlsx_rows, json_path):
                 'description': row['description'],
                 'category': row['category'],
                 'cost': cost,
-                'price': 0,
+                'price': price if price is not None else 0,
                 'quantity': qty,
             })
             added += 1
