@@ -103,6 +103,7 @@ const UI = {
     invResetBtn: document.getElementById('invResetBtn'),
     invFormBackBtn: document.getElementById('invFormBackBtn'),
     invFieldSku: document.getElementById('invFieldSku'),
+    invSkuScanBtn: document.getElementById('invSkuScanBtn'),
     invFieldDesc: document.getElementById('invFieldDesc'),
     invFieldCat: document.getElementById('invFieldCat'),
     invCatList: document.getElementById('invCatList'),
@@ -1113,6 +1114,7 @@ function showInvFormView(sku) {
         const item = STATE.inventory.find(i => i.sku === sku);
         UI.invFieldSku.value = item.sku;
         UI.invFieldSku.disabled = true;
+        UI.invSkuScanBtn.disabled = true;
         UI.invFieldDesc.value = item.description;
         UI.invFieldCat.value = item.category || '';
         UI.invFieldPrice.value = item.price != null ? item.price : '';
@@ -1122,6 +1124,7 @@ function showInvFormView(sku) {
     } else {
         UI.invFieldSku.value = '';
         UI.invFieldSku.disabled = false;
+        UI.invSkuScanBtn.disabled = false;
         UI.invFieldDesc.value = '';
         UI.invFieldCat.value = '';
         UI.invFieldPrice.value = '';
@@ -1260,9 +1263,13 @@ function downloadBlob(file, fileName) {
 let scanStream = null;
 let scanAnimFrame = null;
 let barcodeDetector = null;
+let scanResultCallback = null;
 
-UI.scanBtn.addEventListener('click', openScanModal);
+UI.scanBtn.addEventListener('click', () => openScanModal(handleScannedCode));
 UI.scanCancelBtn.addEventListener('click', closeScanModal);
+UI.invSkuScanBtn.addEventListener('click', () => openScanModal(code => {
+    UI.invFieldSku.value = code;
+}));
 
 function getBarcodeDetectorClass() {
     // Prefer native, fall back to polyfill loaded via CDN
@@ -1271,7 +1278,8 @@ function getBarcodeDetectorClass() {
     return null;
 }
 
-function openScanModal() {
+function openScanModal(onResult) {
+    scanResultCallback = onResult;
     const DetectorClass = getBarcodeDetectorClass();
     if (!DetectorClass) {
         customAlert(
@@ -1309,7 +1317,9 @@ async function scanFrame() {
         const barcodes = await barcodeDetector.detect(UI.scanVideo);
         if (barcodes.length > 0) {
             const code = barcodes[0].rawValue.trim().toUpperCase();
-            handleScannedCode(code);
+            const callback = scanResultCallback;
+            closeScanModal();
+            if (callback) callback(code);
             return;
         }
     } catch (e) {
@@ -1320,8 +1330,6 @@ async function scanFrame() {
 }
 
 function handleScannedCode(code) {
-    closeScanModal();
-
     // Try exact SKU match first, then partial
     let match = STATE.inventory.find(i => i.sku.toUpperCase() === code);
     if (!match) {
@@ -1360,6 +1368,7 @@ function closeScanModal() {
         UI.scanVideo.srcObject = null;
     }
     barcodeDetector = null;
+    scanResultCallback = null;
 }
 
 // --- CUSTOM MODALS ---

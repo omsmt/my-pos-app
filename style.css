@@ -293,6 +293,22 @@ select {
     background: rgba(124, 58, 237, 0.35);
 }
 
+.sku-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sku-input-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.sku-input-row .scan-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 /* ── ITEM PREVIEW ─────────────────────────────── */
 .item-preview {
     background: var(--surface);
