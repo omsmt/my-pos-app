@@ -1274,7 +1274,9 @@ UI.invSkuScanBtn.addEventListener('click', () => openScanModal(code => {
 function getBarcodeDetectorClass() {
     // Prefer native, fall back to polyfill loaded via CDN
     if ('BarcodeDetector' in window) return window.BarcodeDetector;
-    if (window.BarcodeDetectorPolyfill) return window.BarcodeDetectorPolyfill;
+    if (typeof barcodeDetectorPolyfill !== 'undefined' && barcodeDetectorPolyfill.BarcodeDetectorPolyfill) {
+        return barcodeDetectorPolyfill.BarcodeDetectorPolyfill;
+    }
     return null;
 }
 
@@ -1299,7 +1301,9 @@ function openScanModal(onResult) {
         scanStream = stream;
         UI.scanVideo.srcObject = stream;
 
-        barcodeDetector = new DetectorClass({ formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'data_matrix'] });
+        // data_matrix is deliberately excluded: the iOS/Safari polyfill (ZBar-wasm)
+        // throws on construction if asked for a format it can't decode.
+        barcodeDetector = new DetectorClass({ formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code'] });
         UI.scanStatus.textContent = 'Point camera at barcode...';
 
         scanAnimFrame = requestAnimationFrame(scanFrame);
@@ -1315,8 +1319,8 @@ async function scanFrame() {
 
     try {
         const barcodes = await barcodeDetector.detect(UI.scanVideo);
-        if (barcodes.length > 0) {
-            const code = barcodes[0].rawValue.trim().toUpperCase();
+        const code = barcodes.length > 0 ? (barcodes[0].rawValue || '').trim().toUpperCase() : '';
+        if (code) {
             const callback = scanResultCallback;
             closeScanModal();
             if (callback) callback(code);
