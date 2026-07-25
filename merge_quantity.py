@@ -9,14 +9,31 @@ import zipfile
 import xml.etree.ElementTree as ET
 import json
 
-XLSX_FILE = 'Updated_Master_SKU_List_V2_PRICES.xlsx'
+XLSX_FILE = 'Montes_Collectibles_Master_2026-07-24.xlsx'
 JSON_FILE = 'inventory.json'
+SHEET_NAME = 'Master SKU List'
 NS = {'ns': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+REL_NS = {'r': 'http://schemas.openxmlformats.org/package/2006/relationships'}
+WB_REL_NS = {'ns': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
+             'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'}
+
+
+def find_sheet_path(z, sheet_name):
+    wb = ET.parse(z.open('xl/workbook.xml'))
+    sheet_el = next(
+        s for s in wb.findall('.//ns:sheets/ns:sheet', WB_REL_NS)
+        if s.get('name') == sheet_name
+    )
+    rid = sheet_el.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+    rels = ET.parse(z.open('xl/_rels/workbook.xml.rels'))
+    rel_el = next(r for r in rels.findall('.//r:Relationship', REL_NS) if r.get('Id') == rid)
+    return 'xl/' + rel_el.get('Target')
 
 
 def read_xlsx_rows(path):
     rows_data = []
     with zipfile.ZipFile(path) as z:
+        sheet_path = find_sheet_path(z, SHEET_NAME)
         strings = []
         if 'xl/sharedStrings.xml' in z.namelist():
             ss = ET.parse(z.open('xl/sharedStrings.xml'))
@@ -41,7 +58,7 @@ def read_xlsx_rows(path):
                 result = chr(65 + r) + result
             return result
 
-        ws = ET.parse(z.open('xl/worksheets/sheet1.xml'))
+        ws = ET.parse(z.open(sheet_path))
         rows = ws.findall('.//ns:row', NS)
 
         header = [cell_value(c) for c in rows[0].findall('ns:c', NS)]
