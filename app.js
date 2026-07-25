@@ -120,6 +120,17 @@ let selectedPayment = null;
 let isManualMode = false;
 let showOosIndicators = localStorage.getItem('pos_oos') !== 'false';
 
+// Select all text on tap so a new price can be typed straight over an
+// existing value instead of manually clearing it first. Deferred via
+// setTimeout because iOS Safari re-places the caret from the tap itself
+// right after this handler runs, which would otherwise clobber the selection.
+function selectAllOnFocus(el) {
+    if (!el) return;
+    el.addEventListener('focus', () => setTimeout(() => el.select(), 0));
+}
+[UI.previewCostInput, UI.manualPrice, UI.invFieldPrice, UI.invFieldCost, UI.dealPrice]
+    .forEach(selectAllOnFocus);
+
 // --- INITIALIZATION ---
 
 async function loadInventory() {
@@ -488,7 +499,7 @@ function renderCart() {
                     <span>$</span><input type="number" class="cart-price-input"
                         value="${item.unitPrice.toFixed(2)}"
                         onchange="updateCartPrice(${idx}, this.value)"
-                        onclick="this.select()"
+                        onfocus="setTimeout(() => this.select(), 0)"
                         inputmode="decimal">
                     ${inBundle ? '<span class="chip chip-bundle">Bundle</span>' : ''}
                     ${isManual ? '<span class="chip chip-manual">Manual</span>' : ''}
@@ -1458,23 +1469,6 @@ function checkInstallPrompt() {
     if (!isStandalone && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
         UI.installPrompt.style.display = 'block';
     }
-}
-
-// --- SERVICE WORKER (PWA) ---
-if ('serviceWorker' in navigator) {
-    const swCode = `
-        const CACHE_NAME = 'pos-v3';
-        self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-        self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-        self.addEventListener('fetch', e => {
-            e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-        });
-    `;
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl)
-        .then(() => console.log('SW Registered'))
-        .catch(err => console.log('SW Fail', err));
 }
 
 // Start App

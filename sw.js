@@ -1,14 +1,33 @@
-const CACHE_NAME = 'pos-v2';
+const CACHE_NAME = 'pos-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',
   './app.js',
   './style.css',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
+];
+
+// Cross-origin barcode-scanning polyfill (needed for iOS/Safari camera scan).
+// Cached separately since cache.addAll() fails the whole install if any
+// no-cors opaque response looks like an error, and these are third-party.
+const CDN_ASSETS = [
+  'https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.9.15/dist/index.js',
+  'https://cdn.jsdelivr.net/npm/@undecaf/barcode-detector-polyfill@0.9.21/dist/index.js',
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then(cache =>
+      cache.addAll(STATIC_ASSETS).then(() =>
+        Promise.all(CDN_ASSETS.map(url =>
+          fetch(url, { mode: 'no-cors' })
+            .then(res => cache.put(url, res))
+            .catch(() => {}) // don't block install if offline on first run
+        ))
+      )
+    )
   );
   self.skipWaiting();
 });
@@ -39,8 +58,8 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first for all other local assets
-  if (url.origin === location.origin) {
+  // Cache-first for local assets and the pinned CDN scripts above
+  if (url.origin === location.origin || CDN_ASSETS.includes(event.request.url)) {
     event.respondWith(
       caches.match(event.request).then(cached => cached || fetch(event.request))
     );
