@@ -9,7 +9,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 import json
 
-XLSX_FILE = 'Montes_Collectibles_Master_2026-07-24.xlsx'
+XLSX_FILE = 'Montes_Collectibles_Master_2026-10-03v3.xlsx'
 JSON_FILE = 'inventory.json'
 SHEET_NAME = 'Master SKU List'
 NS = {'ns': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
