@@ -53,7 +53,7 @@
         "category": "Accessories",
         "cost": 0.0,
         "price": 15.0,
-        "quantity": -1
+        "quantity": -2
     },
     {
         "sku": "A-008",
@@ -565,7 +565,7 @@
         "category": "Dragon Ball Singles",
         "cost": 0.48,
         "price": 25.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "DBS-055",
@@ -661,7 +661,7 @@
         "category": "Dragon Ball Singles",
         "cost": 0.0,
         "price": 25.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "DBS-067",
@@ -725,7 +725,7 @@
         "category": "Figures",
         "cost": 12.515,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-001",
@@ -789,7 +789,7 @@
         "category": "Games",
         "cost": 12.85,
         "price": 0,
-        "quantity": 5
+        "quantity": 4
     },
     {
         "sku": "G-009",
@@ -797,7 +797,7 @@
         "category": "Games",
         "cost": 8.62,
         "price": 0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "G-010",
@@ -813,7 +813,7 @@
         "category": "Games",
         "cost": 5.938,
         "price": 0,
-        "quantity": 17
+        "quantity": 16
     },
     {
         "sku": "G-014",
@@ -869,7 +869,7 @@
         "category": "Games",
         "cost": 10.97,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-021",
@@ -901,7 +901,7 @@
         "category": "Games",
         "cost": 4.995,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-025",
@@ -917,7 +917,7 @@
         "category": "Games",
         "cost": 2.05,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-027",
@@ -925,7 +925,7 @@
         "category": "Games",
         "cost": 2.05,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-028",
@@ -941,7 +941,7 @@
         "category": "Games",
         "cost": 1.67,
         "price": 0,
-        "quantity": 1
+        "quantity": -1
     },
     {
         "sku": "G-030",
@@ -949,7 +949,7 @@
         "category": "Games",
         "cost": 8.33,
         "price": 0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "G-031",
@@ -973,7 +973,7 @@
         "category": "Games",
         "cost": 6.11,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-034",
@@ -981,7 +981,7 @@
         "category": "Games",
         "cost": 7.3,
         "price": 0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "G-035",
@@ -1005,7 +1005,7 @@
         "category": "Games",
         "cost": 1.48,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-038",
@@ -1013,7 +1013,7 @@
         "category": "Games",
         "cost": 10.61,
         "price": 0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "G-039",
@@ -1021,7 +1021,7 @@
         "category": "Games",
         "cost": 5.55,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "G-040",
@@ -1221,7 +1221,7 @@
         "category": "Keytags",
         "cost": 1.099,
         "price": 5.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "K-019",
@@ -1253,7 +1253,7 @@
         "category": "Keytags",
         "cost": 1.2,
         "price": 5.0,
-        "quantity": 8
+        "quantity": 7
     },
     {
         "sku": "K-024",
@@ -1541,7 +1541,7 @@
         "category": "Keytags",
         "cost": 1.2,
         "price": 5.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "K-060",
@@ -1549,7 +1549,7 @@
         "category": "Keytags",
         "cost": 1.2,
         "price": 5.0,
-        "quantity": 9
+        "quantity": 8
     },
     {
         "sku": "K-061",
@@ -1717,7 +1717,7 @@
         "category": "Keytags",
         "cost": 1.2,
         "price": 5.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "K-083",
@@ -2405,7 +2405,7 @@
         "category": "One Piece Graded",
         "cost": 17.41,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "OPG-002",
@@ -2451,9 +2451,9 @@
         "sku": "OPS-002",
         "description": "Gecko Moria OP06-086 SR",
         "category": "One Piece Singles",
-        "cost": 1.074,
+        "cost": 0.8468,
         "price": 0,
-        "quantity": 1
+        "quantity": 5
     },
     {
         "sku": "OPS-003",
@@ -2477,7 +2477,7 @@
         "category": "One Piece Singles",
         "cost": 1.074,
         "price": 5.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "OPS-006",
@@ -2509,7 +2509,7 @@
         "category": "One Piece Singles",
         "cost": 0.79,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "OPS-011",
@@ -2517,7 +2517,7 @@
         "category": "One Piece Singles",
         "cost": 1.345,
         "price": 5.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "OPS-012",
@@ -2557,7 +2557,7 @@
         "category": "One Piece Singles",
         "cost": 1.255,
         "price": 4.0,
-        "quantity": 4
+        "quantity": 3
     },
     {
         "sku": "OPS-018",
@@ -2589,7 +2589,7 @@
         "category": "One Piece Singles",
         "cost": 2.78,
         "price": 5.0,
-        "quantity": 4
+        "quantity": 3
     },
     {
         "sku": "OPS-022",
@@ -2733,7 +2733,7 @@
         "category": "Pins",
         "cost": 0.68,
         "price": 5.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "P-009",
@@ -2957,7 +2957,7 @@
         "category": "Pokemon Graded",
         "cost": 0.0,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PG-010",
@@ -3069,7 +3069,7 @@
         "category": "Plush",
         "cost": 5.235,
         "price": 15.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PL-005",
@@ -3077,7 +3077,7 @@
         "category": "Plush",
         "cost": 5.154,
         "price": 15.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PL-006",
@@ -3173,7 +3173,7 @@
         "category": "Pokemon Singles",
         "cost": 5.063,
         "price": 15.0,
-        "quantity": 4
+        "quantity": 3
     },
     {
         "sku": "PS-006",
@@ -3189,7 +3189,7 @@
         "category": "Pokemon Singles",
         "cost": 6.185,
         "price": 18.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PS-008",
@@ -3269,7 +3269,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 6.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PS-018",
@@ -3309,7 +3309,7 @@
         "category": "Pokemon Singles",
         "cost": 12.87,
         "price": 30.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-023",
@@ -3349,7 +3349,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 2.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-028",
@@ -3365,7 +3365,7 @@
         "category": "Pokemon Singles",
         "cost": 1.0,
         "price": 6.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-030",
@@ -3389,7 +3389,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 20.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-033",
@@ -3469,7 +3469,7 @@
         "category": "Pokemon Singles",
         "cost": 1.0,
         "price": 17.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-043",
@@ -3501,7 +3501,7 @@
         "category": "Pokemon Singles",
         "cost": 1.0,
         "price": 5.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-047",
@@ -3517,7 +3517,7 @@
         "category": "Pokemon Singles",
         "cost": 1.0,
         "price": 25.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-049",
@@ -3621,7 +3621,7 @@
         "category": "Pokemon Singles",
         "cost": 3.76,
         "price": 7.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PS-062",
@@ -3637,7 +3637,7 @@
         "category": "Pokemon Singles",
         "cost": 7.8,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-064",
@@ -3645,7 +3645,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-065",
@@ -3661,7 +3661,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-067",
@@ -3789,7 +3789,7 @@
         "category": "Pokemon Singles",
         "cost": 4.53,
         "price": 5.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PS-083",
@@ -3893,7 +3893,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 7.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "PS-097",
@@ -3933,7 +3933,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 6.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-103",
@@ -3941,7 +3941,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 5.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-104",
@@ -3957,7 +3957,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 3.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-106",
@@ -3989,7 +3989,7 @@
         "category": "Pokemon Singles",
         "cost": 5.572,
         "price": 5.0,
-        "quantity": 4
+        "quantity": 3
     },
     {
         "sku": "PS-110",
@@ -4004,7 +4004,7 @@
         "description": "Rocket's Crobat 117/098 SR",
         "category": "Pokemon Singles",
         "cost": 4.56,
-        "price": 8.0,
+        "price": 6.0,
         "quantity": 8
     },
     {
@@ -4019,9 +4019,9 @@
         "sku": "PS-113",
         "description": "Rocket's Houndoom 100/098 AR",
         "category": "Pokemon Singles",
-        "cost": 2.913,
+        "cost": 3.9265,
         "price": 7.0,
-        "quantity": 1
+        "quantity": 2
     },
     {
         "sku": "PS-114",
@@ -4173,7 +4173,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-134",
@@ -4197,7 +4197,7 @@
         "category": "Pokemon Singles",
         "cost": 9.49,
         "price": 18.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-137",
@@ -4237,7 +4237,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 4.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-143",
@@ -4451,9 +4451,9 @@
         "sku": "PS-172",
         "description": "Alakazam 071/063 AR",
         "category": "Pokemon Singles",
-        "cost": 0.0,
+        "cost": 4.59,
         "price": 0,
-        "quantity": 0
+        "quantity": 3
     },
     {
         "sku": "PS-173",
@@ -4733,7 +4733,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 0,
-        "quantity": 0
+        "quantity": -1
     },
     {
         "sku": "PS-208",
@@ -4795,9 +4795,9 @@
         "sku": "PS-215",
         "description": "N's Reshiram 109/100 AR",
         "category": "Pokemon Singles",
-        "cost": 0.0,
+        "cost": 13.02,
         "price": 0,
-        "quantity": 0
+        "quantity": 1
     },
     {
         "sku": "PS-216",
@@ -5021,7 +5021,7 @@
         "category": "Yugioh Graded",
         "cost": 37.91,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "YG-002",
@@ -5029,7 +5029,7 @@
         "category": "Yugioh Graded",
         "cost": 37.91,
         "price": 0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "YG-003",
@@ -5099,9 +5099,9 @@
         "sku": "YS-005",
         "description": "Blue Eyes Toon Dragon BE1-JP066 Super Rare",
         "category": "Yugioh Singles",
-        "cost": 1.81,
+        "cost": 1.2475,
         "price": 18.0,
-        "quantity": 1
+        "quantity": 4
     },
     {
         "sku": "YS-006",
@@ -5141,7 +5141,7 @@
         "category": "Yugioh Singles",
         "cost": 1.441,
         "price": 5.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "YS-011",
@@ -5155,9 +5155,9 @@
         "sku": "YS-012",
         "description": "Buster Blader Lost Art YAP1-JP007 Ultra Rare",
         "category": "Yugioh Singles",
-        "cost": 0.82,
+        "cost": 1.64,
         "price": 6.0,
-        "quantity": 1
+        "quantity": 3
     },
     {
         "sku": "YS-013",
@@ -5165,15 +5165,15 @@
         "category": "Yugioh Singles",
         "cost": 0.0,
         "price": 6.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "YS-014",
         "description": "Celtic Guardian Lost Art YAP1-JP004 Ultra Rare",
         "category": "Yugioh Singles",
-        "cost": 0.82,
+        "cost": 3.52,
         "price": 6.0,
-        "quantity": 1
+        "quantity": 3
     },
     {
         "sku": "YS-015",
@@ -5251,9 +5251,9 @@
         "sku": "YS-024",
         "description": "Dark Magician Girl Lost Art YAP1-JP006 Ultra Rare",
         "category": "Yugioh Singles",
-        "cost": 7.33,
+        "cost": 12.0467,
         "price": 27.0,
-        "quantity": 2
+        "quantity": 6
     },
     {
         "sku": "YS-025",
@@ -5301,7 +5301,7 @@
         "category": "Yugioh Singles",
         "cost": 0.0,
         "price": 8.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "YS-031",
@@ -5469,7 +5469,7 @@
         "category": "Yugioh Singles",
         "cost": 0.0,
         "price": 3.0,
-        "quantity": 17
+        "quantity": 16
     },
     {
         "sku": "YS-052",
@@ -5485,7 +5485,7 @@
         "category": "Yugioh Singles",
         "cost": 0.82,
         "price": 12.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "YS-054",
@@ -5507,9 +5507,9 @@
         "sku": "YS-056",
         "description": "Jinzo Lost Art YAP1-JP008 Ultra Rare",
         "category": "Yugioh Singles",
-        "cost": 0.82,
+        "cost": 2.64,
         "price": 0,
-        "quantity": 0
+        "quantity": 1
     },
     {
         "sku": "YS-058",
@@ -5533,7 +5533,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 10.0,
-        "quantity": 6
+        "quantity": 5
     },
     {
         "sku": "YS-061",
@@ -5605,7 +5605,7 @@
         "category": "Yugioh Singles",
         "cost": 0.0,
         "price": 2.0,
-        "quantity": 6
+        "quantity": 5
     },
     {
         "sku": "YS-070",
@@ -5637,7 +5637,7 @@
         "category": "Yugioh Singles",
         "cost": 1.441,
         "price": 8.0,
-        "quantity": 3
+        "quantity": 2
     },
     {
         "sku": "YS-074",
@@ -5693,7 +5693,7 @@
         "category": "Yugioh Singles",
         "cost": 0.0,
         "price": 3.0,
-        "quantity": 43
+        "quantity": 42
     },
     {
         "sku": "YS-081",
@@ -5715,9 +5715,9 @@
         "sku": "YS-083",
         "description": "Summoned Skull Lost Art YAP1-JP003 Ultra Rare",
         "category": "Yugioh Singles",
-        "cost": 0.82,
+        "cost": 3.52,
         "price": 7.0,
-        "quantity": 1
+        "quantity": 2
     },
     {
         "sku": "YS-084",
@@ -5733,7 +5733,7 @@
         "category": "Yugioh Singles",
         "cost": 2.939,
         "price": 3.0,
-        "quantity": 20
+        "quantity": 19
     },
     {
         "sku": "YS-086",
@@ -5996,7 +5996,7 @@
         "description": "Lance's Charizard V SWSH133 25th Celebrations Promo",
         "category": "Pokemon Singles",
         "cost": 0.0,
-        "price": 20.0,
+        "price": 15.0,
         "quantity": 1
     },
     {
@@ -6101,7 +6101,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 2.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-231",
@@ -6149,7 +6149,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 2.0,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "sku": "PS-237",
@@ -6285,7 +6285,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 3.0,
-        "quantity": 9
+        "quantity": 8
     },
     {
         "sku": "YS-098",
@@ -6293,7 +6293,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 3.0,
-        "quantity": 9
+        "quantity": 8
     },
     {
         "sku": "YS-099",
@@ -6301,7 +6301,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 3.0,
-        "quantity": 9
+        "quantity": 8
     },
     {
         "sku": "YS-100",
@@ -6333,7 +6333,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 3.0,
-        "quantity": 9
+        "quantity": 8
     },
     {
         "sku": "YS-104",
@@ -6357,7 +6357,7 @@
         "category": "Yugioh Singles",
         "cost": 0.27,
         "price": 2.0,
-        "quantity": 7
+        "quantity": 6
     },
     {
         "sku": "YS-107",
@@ -6557,7 +6557,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 2.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-254",
@@ -6565,7 +6565,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 5.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-255",
@@ -6573,7 +6573,7 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 10.0,
-        "quantity": 1
+        "quantity": 0
     },
     {
         "sku": "PS-256",
@@ -6605,6 +6605,1550 @@
         "category": "Pokemon Singles",
         "cost": 0.0,
         "price": 6.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-131",
+        "description": "Summoned Skull RB-03 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 7.04,
+        "price": 18.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-132",
+        "description": "Dark Magican Girl P4-01 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 3.5075,
+        "price": 13.0,
+        "quantity": 8
+    },
+    {
+        "sku": "YS-133",
+        "description": "Panther Warrior G3-B1 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 5.28,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-134",
+        "description": "Toon Dark Magician Girl G6-02 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 19.18,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-135",
+        "description": "Jinzo CA-00 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 13.11,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-260",
+        "description": "Raichu & Alolan Raichu GX 008/054",
+        "category": "Pokemon Singles",
+        "cost": 19.98,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-261",
+        "description": "Gardevoir & Sylveon GX 031/055",
+        "category": "Pokemon Singles",
+        "cost": 35.02,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-262",
+        "description": "Pikachu 291/SV-P Promo",
+        "category": "Pokemon Singles",
+        "cost": 4.4842,
+        "price": 10.0,
+        "quantity": 12
+    },
+    {
+        "sku": "PS-263",
+        "description": "Raikou EX 092/076 SR",
+        "category": "Pokemon Singles",
+        "cost": 5.28,
+        "price": 9.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-264",
+        "description": "Haunter 022/021",
+        "category": "Pokemon Singles",
+        "cost": 14.5467,
+        "price": 30.0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-136",
+        "description": "Yugioh Old Bandai Yugi",
+        "category": "Yugioh Singles",
+        "cost": 2.22,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-137",
+        "description": "Yugioh Old Bandai Shadi",
+        "category": "Yugioh Singles",
+        "cost": 1.43,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-138",
+        "description": "Yugioh Old Bandai Tristan",
+        "category": "Yugioh Singles",
+        "cost": 1.43,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-265",
+        "description": "Pidgeotto 119/108 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.4,
+        "price": 7.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-266",
+        "description": "Pidgeot EX 335/190 SSR",
+        "category": "Pokemon Singles",
+        "cost": 3.01,
+        "price": 4.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-267",
+        "description": "Alakazam 326/190 SSR",
+        "category": "Pokemon Singles",
+        "cost": 1.46,
+        "price": 5.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-268",
+        "description": "Primarina 085/081 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.8575,
+        "price": 5.0,
+        "quantity": 4
+    },
+    {
+        "sku": "PS-269",
+        "description": "Wartortle 171/165 AR",
+        "category": "Pokemon Singles",
+        "cost": 17.6825,
+        "price": 25.0,
+        "quantity": 4
+    },
+    {
+        "sku": "PS-270",
+        "description": "Zacian 087/080 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.4,
+        "price": 3.0,
+        "quantity": 3
+    },
+    {
+        "sku": "PS-271",
+        "description": "Palafin 111/108 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.39,
+        "price": 4.0,
+        "quantity": 4
+    },
+    {
+        "sku": "PS-272",
+        "description": "Growlithe 078/076 AR",
+        "category": "Pokemon Singles",
+        "cost": 7.365,
+        "price": 10.0,
+        "quantity": 4
+    },
+    {
+        "sku": "PS-273",
+        "description": "Magmortar 079/076 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.4,
+        "price": 5.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-274",
+        "description": "Electivire 081/076 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.2333,
+        "price": 5.0,
+        "quantity": 3
+    },
+    {
+        "sku": "PS-275",
+        "description": "Kyogre 080/076 AR",
+        "category": "Pokemon Singles",
+        "cost": 10.5014,
+        "price": 15.0,
+        "quantity": 7
+    },
+    {
+        "sku": "PS-276",
+        "description": "Groudon 084/076 AR",
+        "category": "Pokemon Singles",
+        "cost": 10.86,
+        "price": 15.0,
+        "quantity": 8
+    },
+    {
+        "sku": "PS-277",
+        "description": "Lt Surge's Deal 090/063 SAR",
+        "category": "Pokemon Singles",
+        "cost": 4.59,
+        "price": 10.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-278",
+        "description": "Armarouge 083/081 AR",
+        "category": "Pokemon Singles",
+        "cost": 3.01,
+        "price": 4.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-279",
+        "description": "Pidgey 118/108 AR",
+        "category": "Pokemon Singles",
+        "cost": 3.8,
+        "price": 9.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-280",
+        "description": "Steelix 074/066 AR",
+        "category": "Pokemon Singles",
+        "cost": 7.76,
+        "price": 13.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-281",
+        "description": "Lt. Surge's Rattata 015/032 CLK",
+        "category": "Pokemon Singles",
+        "cost": 3.01,
+        "price": 5.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-282",
+        "description": "N's Zekrom 210/193 AR",
+        "category": "Pokemon Singles",
+        "cost": 6.18,
+        "price": 8.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-283",
+        "description": "Sylveon 068/187",
+        "category": "Pokemon Singles",
+        "cost": 0.88,
+        "price": 2.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-284",
+        "description": "Sylveon 022/064",
+        "category": "Pokemon Singles",
+        "cost": 0.88,
+        "price": 2.0,
+        "quantity": 3
+    },
+    {
+        "sku": "PS-285",
+        "description": "Leafeon 002/187",
+        "category": "Pokemon Singles",
+        "cost": 0.88,
+        "price": 2.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-139",
+        "description": "Toon Summoned Skull PS-22 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 5.585,
+        "price": 15.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-140",
+        "description": "Toon Mermaid PS-21 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 4.22,
+        "price": 15.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-141",
+        "description": "Dark Magician LOB Art QCAC-JP018 Quarter Century Rare",
+        "category": "Yugioh Singles",
+        "cost": 6.86,
+        "price": 25.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-142",
+        "description": "Dark Magician Tin Art QCAC-JP018 Quarter Century Rare",
+        "category": "Yugioh Singles",
+        "cost": 6.86,
+        "price": 15.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-286",
+        "description": "Mew EX 327/190 SSR",
+        "category": "Pokemon Singles",
+        "cost": 15.68,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-287",
+        "description": "Zacian V 225/172 SAR",
+        "category": "Pokemon Singles",
+        "cost": 10.14,
+        "price": 25.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-288",
+        "description": "Radiant Greninja 004/044",
+        "category": "Pokemon Singles",
+        "cost": 1.43,
+        "price": 5.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-289",
+        "description": "Radiant Charizard 001/044",
+        "category": "Pokemon Singles",
+        "cost": 5.39,
+        "price": 12.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-290",
+        "description": "Feraligatr DPBP#191 DP2 Holo Rare",
+        "category": "Pokemon Singles",
+        "cost": 6.86,
+        "price": 30.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-291",
+        "description": "Blastoise & Piplup GX 016/064 RR",
+        "category": "Pokemon Singles",
+        "cost": 26.22,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-292",
+        "description": "Reshiram & Charizard GX 016/173 RR",
+        "category": "Pokemon Singles",
+        "cost": 26.22,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-293",
+        "description": "Venusar & Snivy GX 001/064 RR",
+        "category": "Pokemon Singles",
+        "cost": 13.02,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-294",
+        "description": "Hop's Zacian EX 118/100 SR",
+        "category": "Pokemon Singles",
+        "cost": 2.46,
+        "price": 5.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-295",
+        "description": "Suicune V 068/067",
+        "category": "Pokemon Singles",
+        "cost": 5.98,
+        "price": 15.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-296",
+        "description": "Gyarados EX 091/076 SR",
+        "category": "Pokemon Singles",
+        "cost": 13.02,
+        "price": 17.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-297",
+        "description": "Mega Dragonite EX 232/193 MA",
+        "category": "Pokemon Singles",
+        "cost": 13.545,
+        "price": 18.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-143",
+        "description": "Red Eyes Black Dragon YAP1-JP002 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 8.8,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-144",
+        "description": "Toon Dark Magician RV01-JP010 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 4.715,
+        "price": 13.0,
+        "quantity": 4
+    },
+    {
+        "sku": "YS-145",
+        "description": "Toon Black Luster Soldier RV01-JP009 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 3.356,
+        "price": 7.0,
+        "quantity": 5
+    },
+    {
+        "sku": "YS-146",
+        "description": "Toon Red Eyes Black Dragon RV01-JP011 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 3.4127,
+        "price": 10.0,
+        "quantity": 15
+    },
+    {
+        "sku": "YS-147",
+        "description": "Toon Dark Magician Girl BE02-JP207",
+        "category": "Yugioh Singles",
+        "cost": 11.34,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-298",
+        "description": "Espeon & Deoxys EX 001/031",
+        "category": "Pokemon Singles",
+        "cost": 11.62,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-299",
+        "description": "Arceus V 267/S-P Promo SEALED",
+        "category": "Pokemon Singles",
+        "cost": 15.68,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-148",
+        "description": "Beast of Talwar BPT-J01 SEALED",
+        "category": "Yugioh Singles",
+        "cost": 4.22,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-149",
+        "description": "Favorite HERO Shining Flare Wingman LOCH-JP004 Over Frame Prismatic Rare",
+        "category": "Yugioh Singles",
+        "cost": 30.79,
+        "price": 50.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-150",
+        "description": "Blue Eyes White Dragon Yap1-JP001 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 6.94,
+        "price": 20.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-151",
+        "description": "Blue Eyes White Dragon QCCP-JP001 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 15.84,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-152",
+        "description": "Gagaga Girl - Cell Phone Subtraction LOCH-JP012 Over Frame Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 13.29,
+        "price": 20.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-153",
+        "description": "Multiplying Kuriboh LOCH-JP002 Over Frame Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 8.89,
+        "price": 20.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-300",
+        "description": "Suicune V 215/172 SAR",
+        "category": "Pokemon Singles",
+        "cost": 34.72,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-301",
+        "description": "Pikachu 120/SV-P Promo",
+        "category": "Pokemon Singles",
+        "cost": 7.6943,
+        "price": 12.0,
+        "quantity": 7
+    },
+    {
+        "sku": "PS-302",
+        "description": "Ivysaur 167/165 AR",
+        "category": "Pokemon Singles",
+        "cost": 12.2,
+        "price": 25.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-303",
+        "description": "Gouging Fire 098/071 UR",
+        "category": "Pokemon Singles",
+        "cost": 8.55,
+        "price": 17.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-154",
+        "description": "Toon Blue Eyes Ultimate Dragon RV01-JP005 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 6.145,
+        "price": 15.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-155",
+        "description": "Cyberse Code Magician LOCH-JP017 Over Frame Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 3.01,
+        "price": 10.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-304",
+        "description": "Azumarill Neo Holo 184",
+        "category": "Pokemon Singles",
+        "cost": 13.07,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-305",
+        "description": "Manectric 086/081 AR",
+        "category": "Pokemon Singles",
+        "cost": 2.41,
+        "price": 4.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-306",
+        "description": "Clefairy 086/080 AR",
+        "category": "Pokemon Singles",
+        "cost": 8.11,
+        "price": 15.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-307",
+        "description": "Pikachu 197/SV-P Promo",
+        "category": "Pokemon Singles",
+        "cost": 8.11,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-308",
+        "description": "Gengar V 253/414 & 001/019",
+        "category": "Pokemon Singles",
+        "cost": 6.86,
+        "price": 12.0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-309",
+        "description": "Espeon & Deoxys GX 001/031",
+        "category": "Pokemon Singles",
+        "cost": 10.72,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-310",
+        "description": "Crobat V 243/184 CSR",
+        "category": "Pokemon Singles",
+        "cost": 6.32,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-311",
+        "description": "Arceus V 267/S-P Promo",
+        "category": "Pokemon Singles",
+        "cost": 10.38,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-312",
+        "description": "Garchomp & Giratina GX 032/054 RR",
+        "category": "Pokemon Singles",
+        "cost": 11.26,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-313",
+        "description": "Reshiram & Charizard GX 007/095 RR",
+        "category": "Pokemon Singles",
+        "cost": 21.82,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-314",
+        "description": "Charizard & Braixen GX 008/064 RR",
+        "category": "Pokemon Singles",
+        "cost": 21.82,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-315",
+        "description": "Greninja & Zoroark GX 072/173 RR",
+        "category": "Pokemon Singles",
+        "cost": 13.02,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-316",
+        "description": "Lucario & Melmetal GX 083/173 RR",
+        "category": "Pokemon Singles",
+        "cost": 7.74,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PS-317",
+        "description": "Radiant Charizard 011/071 K",
+        "category": "Pokemon Singles",
+        "cost": 11.26,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-318",
+        "description": "Raichu V 106/100 SR",
+        "category": "Pokemon Singles",
+        "cost": 6.86,
+        "price": 12.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-020",
+        "description": "Team Rocket's Houndoom 100/098 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.42,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PG-021",
+        "description": "Cynthia's Roserade 065/063 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.42,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PG-022",
+        "description": "Tatsugiri 112/101 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.42,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PG-023",
+        "description": "Radiant Charizard 001/038 PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 65.58,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-024",
+        "description": "Radiant Charizard 001/044 PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 65.58,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-025",
+        "description": "Mega Dragonite EX 232/193 MA PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 74.8,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-026",
+        "description": "Mega Gengar EX 230/193 MA PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 96.8,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-027",
+        "description": "Mega Lucario EX 228/193 MA PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 66.0,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-028",
+        "description": "Team Rocket's Dugtrio 206/193 AR PSA 9",
+        "category": "Pokemon Graded",
+        "cost": 23.76,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-029",
+        "description": "Steelix 073/063 AR PSA 9",
+        "category": "Pokemon Graded",
+        "cost": 26.4,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-030",
+        "description": "Wigglytuff 091/080 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "PG-031",
+        "description": "Darmanitan 099/086 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-032",
+        "description": "Froslass 104/101 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-033",
+        "description": "Kingambit 089/078 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-034",
+        "description": "Togekiss 203/193 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-035",
+        "description": "Charcadet 083/080 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-036",
+        "description": "Steelix 073/063 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-037",
+        "description": "Houndour 115/108 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-038",
+        "description": "Zacian 087/080 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-039",
+        "description": "Phanpy 115/106 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-040",
+        "description": "Furret 110/100 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-041",
+        "description": "Exeggutor 066/063 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-042",
+        "description": "Iron Thorns 077/071 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-043",
+        "description": "Dewgong 084/080 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "PG-044",
+        "description": "Ethan's Magcargo 197/193 AR PSA 10",
+        "category": "Pokemon Graded",
+        "cost": 39.6,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "BYSE-002",
+        "description": "Beyblade Wing Defence Sealed (packet, no box)",
+        "category": "Beyblade Sealed",
+        "cost": 10.34,
+        "price": 0,
+        "quantity": 6
+    },
+    {
+        "sku": "BYSE-003",
+        "description": "Beyblade Wing Attacker Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 16.7833,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "BYSE-004",
+        "description": "Beyblade Metal Dranzer A-42 Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 13.84,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "G-047",
+        "description": "Zoids Liger Zero GBC New",
+        "category": "Games",
+        "cost": 33.0,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YSE-012",
+        "description": "Yugioh World Premiere 2024 Box",
+        "category": "Yugioh Sealed",
+        "cost": 13.38,
+        "price": 40.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-156",
+        "description": "Red Eyes Black Dragon LPST-JP004 Stamp Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.93,
+        "price": 6.0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-157",
+        "description": "Sky Striker Ace - Raye LPST-JP011 Stamp Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.77,
+        "price": 5.0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-158",
+        "description": "Blue Eyes Toon Dragon PGB1-JP021 Millenium Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.06,
+        "price": 10.0,
+        "quantity": 3
+    },
+    {
+        "sku": "BYSE-005",
+        "description": "Beyblade Master Dranzer A-32 Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 10.38,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "BYSE-006",
+        "description": "Beyblade Master Driger A-37 Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 10.38,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "BYSE-007",
+        "description": "Beyblade burst B-63 Beast Behemoth Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 10.38,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "BYSE-008",
+        "description": "Beyblade Master Draciel A-33 Sealed Box",
+        "category": "Beyblade Sealed",
+        "cost": 23.42,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "G-048",
+        "description": "Yugioh GX World Championship 2008 DS",
+        "category": "Games",
+        "cost": 5.31,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "G-049",
+        "description": "Beyblade GBA Loose Cartridge",
+        "category": "Games",
+        "cost": 1.06,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "G-050",
+        "description": "Beyblade GBC Loose Cartridge",
+        "category": "Games",
+        "cost": 1.06,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "G-051",
+        "description": "Tamagotchi 2 Game Boy Loose Cartridge",
+        "category": "Games",
+        "cost": 1.06,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YSE-013",
+        "description": "Rush Duel Requiem of Destruction Box",
+        "category": "Yugioh Sealed",
+        "cost": 5.16,
+        "price": 25.0,
+        "quantity": 11
+    },
+    {
+        "sku": "OPS-029",
+        "description": "Sanji 500 Years in the Future OP07-065 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-030",
+        "description": "Shirahoshi EB01-057 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-031",
+        "description": "Jewelry Bonney OP07-026 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-032",
+        "description": "Carrot OP08-023 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-033",
+        "description": "Laboon EB01-048 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-034",
+        "description": "Crocodile OP09-046 SR",
+        "category": "One Piece Singles",
+        "cost": 0.5209,
+        "price": 0,
+        "quantity": 11
+    },
+    {
+        "sku": "OPS-035",
+        "description": "Shanks OP09-004 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-036",
+        "description": "Luffy OP07-109 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-159",
+        "description": "Raviel, Lord of Phantasms LC02-EN003 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.35,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-160",
+        "description": "Hamon, Lord of Striking Thunder LC02-EN002 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.35,
+        "price": 2.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-161",
+        "description": "Uria, Lord of Searing Flames LC02-EN001 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.35,
+        "price": 3.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-162",
+        "description": "Dark Magician Girl RDS-ENSE2 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 12.78,
+        "price": 50.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-163",
+        "description": "Exodia The Forbidden One TN23-EN002 Quarter Century Rare",
+        "category": "Yugioh Singles",
+        "cost": 14.1,
+        "price": 35.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-164",
+        "description": "Dark Magician Girl MP22-EN268 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 14.9,
+        "price": 30.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-165",
+        "description": "Blue Eyes Ultimate Dragon P3-01 Super Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.06,
+        "price": 10.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-166",
+        "description": "Destiny Hero Plasma PAC1-JP032 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.06,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-167",
+        "description": "Destiny Hero Plasma Alt Art PAC1-JP032 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 1.06,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-168",
+        "description": "Elemental Hero Neos PAC1-JP005 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-169",
+        "description": "Elemental Hero Neos Alt Art PAC1-JP005 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-170",
+        "description": "Elemental Hero Honest Neos HC01-JP015 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 6
+    },
+    {
+        "sku": "YS-171",
+        "description": "Rainbow Dragon HC01-JP018 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 6
+    },
+    {
+        "sku": "YS-172",
+        "description": "Dark Magician P4-02 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.79,
+        "price": 10.0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-173",
+        "description": "Elemental Hero Steam Healer BPT-JP004 Ultimate Rare",
+        "category": "Yugioh Singles",
+        "cost": 3.73,
+        "price": 20.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-174",
+        "description": "Shiba Inu YAP1-JP009 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.58,
+        "price": 0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-175",
+        "description": "Rush Duel Red Eyes Black Dragon RD/VJMP-JP001 PSA 9",
+        "category": "Yugioh Graded",
+        "cost": 19.16,
+        "price": 55.0,
+        "quantity": 1
+    },
+    {
+        "sku": "OPS-037",
+        "description": "Shanks ST13-009",
+        "category": "One Piece Singles",
+        "cost": 0.79,
+        "price": 0,
+        "quantity": 8
+    },
+    {
+        "sku": "OPS-038",
+        "description": "Benn.Beckamn OP09-009 SR",
+        "category": "One Piece Singles",
+        "cost": 0.52,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "OPS-039",
+        "description": "Trafalgar Law OP01-047 SR",
+        "category": "One Piece Singles",
+        "cost": 0.6906,
+        "price": 0,
+        "quantity": 17
+    },
+    {
+        "sku": "OPS-040",
+        "description": "Sabo OP05-007 SR",
+        "category": "One Piece Singles",
+        "cost": 0.38,
+        "price": 0,
+        "quantity": 25
+    },
+    {
+        "sku": "OPS-041",
+        "description": "Jewelry Bonney EB02-015",
+        "category": "One Piece Singles",
+        "cost": 0.79,
+        "price": 0,
+        "quantity": 4
+    },
+    {
+        "sku": "OPS-042",
+        "description": "Borsalino OP05-051 SR",
+        "category": "One Piece Singles",
+        "cost": 0.79,
+        "price": 0,
+        "quantity": 4
+    },
+    {
+        "sku": "OPS-043",
+        "description": "Yamato OP04-112",
+        "category": "One Piece Singles",
+        "cost": 0.48,
+        "price": 0,
+        "quantity": 11
+    },
+    {
+        "sku": "OPS-044",
+        "description": "Kaido ST04-003 SR",
+        "category": "One Piece Singles",
+        "cost": 0.59,
+        "price": 0,
+        "quantity": 9
+    },
+    {
+        "sku": "OPS-045",
+        "description": "Edward Newgate Whitebeard OP02-004 SR",
+        "category": "One Piece Singles",
+        "cost": 0.59,
+        "price": 0,
+        "quantity": 9
+    },
+    {
+        "sku": "OPS-046",
+        "description": "Sakazuki OP02-099 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "OPS-047",
+        "description": "Borsalino OP02-114 SR",
+        "category": "One Piece Singles",
+        "cost": 0.53,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "OPS-048",
+        "description": "Ulti OP05-043 SR",
+        "category": "One Piece Singles",
+        "cost": 0.41,
+        "price": 0,
+        "quantity": 13
+    },
+    {
+        "sku": "OPS-049",
+        "description": "Eustass \"Captain\" Kid OP01-051 SR",
+        "category": "One Piece Singles",
+        "cost": 0.27,
+        "price": 0,
+        "quantity": 12
+    },
+    {
+        "sku": "OPS-050",
+        "description": "Kuzan OP02-096 SR",
+        "category": "One Piece Singles",
+        "cost": 0.29,
+        "price": 0,
+        "quantity": 11
+    },
+    {
+        "sku": "OPS-051",
+        "description": "Luffy OP01-024 SR",
+        "category": "One Piece Singles",
+        "cost": 0.8,
+        "price": 0,
+        "quantity": 8
+    },
+    {
+        "sku": "OPS-052",
+        "description": "Kouzuki Hiyori OP06-106 SR",
+        "category": "One Piece Singles",
+        "cost": 0.48,
+        "price": 0,
+        "quantity": 11
+    },
+    {
+        "sku": "OPS-053",
+        "description": "Dracule Mihawk OP01-070 SR",
+        "category": "One Piece Singles",
+        "cost": 0.62,
+        "price": 0,
+        "quantity": 12
+    },
+    {
+        "sku": "OPS-054",
+        "description": "Brook SR EB01-046 SR",
+        "category": "One Piece Singles",
+        "cost": 0.63,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "OPS-055",
+        "description": "Charlotte Pudding PRB02-010 SR",
+        "category": "One Piece Singles",
+        "cost": 1.05,
+        "price": 0,
+        "quantity": 7
+    },
+    {
+        "sku": "OPS-056",
+        "description": "Shanks ST16-004 SR",
+        "category": "One Piece Singles",
+        "cost": 0.52,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "OPS-057",
+        "description": "Monkey D. Dragon OP07-015 SR",
+        "category": "One Piece Singles",
+        "cost": 0.52,
+        "price": 0,
+        "quantity": 10
+    },
+    {
+        "sku": "YS-176",
+        "description": "Toon Dark Magician Girl QCLP-JP010 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.28,
+        "price": 10.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-177",
+        "description": "Toon Dark Magician Girl QCLP-JP010 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 0.28,
+        "price": 5.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-178",
+        "description": "Toon Cyber Dragon RV01-JP014 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 2.63,
+        "price": 5.0,
+        "quantity": 2
+    },
+    {
+        "sku": "YS-179",
+        "description": "Red-Eyes Black Dragon RD/VJMP-JP001 Rush Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 2.13,
+        "price": 30.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-180",
+        "description": "Black Dragon's Chick RD/VJMP-JP002 Rush Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 2.13,
+        "price": 7.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-181",
+        "description": "Inferno Fire Blast RD/VJMP-JP003 Rush Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 2.13,
+        "price": 5.0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-182",
+        "description": "Blue Eyes Toon Dragon PS-00 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 13.49,
+        "price": 0,
+        "quantity": 3
+    },
+    {
+        "sku": "YS-183",
+        "description": "Blue Eyes Ultimate Toon Dragon RV01-JP005 Ultra Rare",
+        "category": "Yugioh Singles",
+        "cost": 4.7,
+        "price": 8.0,
+        "quantity": 6
+    },
+    {
+        "sku": "YS-184",
+        "description": "Toon Bookmark RV01-JP020 Secret Rare",
+        "category": "Yugioh Singles",
+        "cost": 5.32,
+        "price": 7.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PSE-018",
+        "description": "Mega Brave Booster Pack Japanese",
+        "category": "Pokemon Sealed",
+        "cost": 1.58,
+        "price": 5.0,
+        "quantity": 51
+    },
+    {
+        "sku": "PSE-019",
+        "description": "Mega Symphonia Booster Pack Japanese",
+        "category": "Pokemon Sealed",
+        "cost": 1.58,
+        "price": 5.0,
+        "quantity": 55
+    },
+    {
+        "sku": "YSE-014",
+        "description": "Yugioh Revoution Booster Box Japanese",
+        "category": "Yugioh Sealed",
+        "cost": 33.8,
+        "price": 85.0,
+        "quantity": 4
+    },
+    {
+        "sku": "YSE-015",
+        "description": "Yugioh Premium Pack Tokyo Dome 25th Box Japanese",
+        "category": "Yugioh Sealed",
+        "cost": 43.28,
+        "price": 85.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PSE-020",
+        "description": "Zorua & Zoroark RX Box Sealed Japanese",
+        "category": "Pokemon Sealed",
+        "cost": 15.84,
+        "price": 50.0,
+        "quantity": 1
+    },
+    {
+        "sku": "OTH-002",
+        "description": "One Piece Cosplay Sword Trafalgar Law",
+        "category": "Other",
+        "cost": 20.0,
+        "price": 50.0,
+        "quantity": 1
+    },
+    {
+        "sku": "OTH-003",
+        "description": "One Piece Cosplay Sword Zoro",
+        "category": "Other",
+        "cost": 20.0,
+        "price": 50.0,
+        "quantity": 1
+    },
+    {
+        "sku": "PS-319",
+        "description": "BULK - Pokemon",
+        "category": "Pokemon Singles",
+        "cost": 0.0,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "YS-185",
+        "description": "BULK - Yugioh",
+        "category": "Yugioh Singles",
+        "cost": 0.0,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "NS-054",
+        "description": "BULK - Naruto",
+        "category": "Naruto Singles",
+        "cost": 0.0,
+        "price": 0,
+        "quantity": 1
+    },
+    {
+        "sku": "A-022",
+        "description": "Ultimate Guard Deck Box 100ct Plastic",
+        "category": "Accessories",
+        "cost": 0.0,
+        "price": 2.0,
+        "quantity": 1
+    },
+    {
+        "sku": "A-023",
+        "description": "Ultimate Guard Deck Box Flip 80ct",
+        "category": "Accessories",
+        "cost": 0.0,
+        "price": 5.0,
         "quantity": 1
     }
 ]
