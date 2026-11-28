@@ -55,6 +55,8 @@ const UI = {
     salesList: document.getElementById('salesList'),
     totalCount: document.getElementById('totalCount'),
     totalRevenue: document.getElementById('totalRevenue'),
+    otherStat: document.getElementById('otherStat'),
+    otherTotal: document.getElementById('otherTotal'),
     headerRevenue: document.getElementById('headerRevenue'),
     exportBtn: document.getElementById('exportBtn'),
     resetBtn: document.getElementById('resetBtn'),
@@ -710,7 +712,15 @@ function checkCheckoutReady() {
 }
 
 // Checkout opens review modal first
-UI.checkoutBtn.addEventListener('click', () => {
+UI.checkoutBtn.addEventListener('click', async () => {
+    if (selectedPayment === 'other' && !UI.paymentNote.value.trim()) {
+        const proceed = await customConfirm('No comment added for this Other payment.\nContinue without one?', 'No Comment');
+        if (!proceed) {
+            UI.paymentNote.focus();
+            return;
+        }
+    }
+
     const subtotal = STATE.cart.reduce((sum, item) => sum + item.lineTotal, 0);
     const dealVal = parseFloat(UI.dealPrice.value);
     const manualDeal = !isNaN(dealVal) && dealVal >= 0;
@@ -788,9 +798,15 @@ function completeSale() {
 }
 
 // --- SALES HISTORY ---
+// Takings = money actually received (Cash + PayID). "Other" sales (trades etc.) are excluded.
+function computeTakings() {
+    return STATE.sales
+        .filter(s => s.paymentMethod !== 'other')
+        .reduce((sum, s) => sum + s.total, 0);
+}
+
 function updateHeaderRevenue() {
-    const revenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
-    UI.headerRevenue.textContent = `$${revenue.toFixed(2)}`;
+    UI.headerRevenue.textContent = `$${computeTakings().toFixed(2)}`;
 }
 
 function renderSales() {
@@ -798,8 +814,12 @@ function renderSales() {
 
     if (summaryVisible) renderProductSummary();
     UI.totalCount.textContent = STATE.sales.length;
-    const revenue = STATE.sales.reduce((sum, s) => sum + s.total, 0);
-    UI.totalRevenue.textContent = `$${revenue.toFixed(2)}`;
+    UI.totalRevenue.textContent = `$${computeTakings().toFixed(2)}`;
+    const otherTotal = STATE.sales
+        .filter(s => s.paymentMethod === 'other')
+        .reduce((sum, s) => sum + s.total, 0);
+    UI.otherStat.style.display = otherTotal > 0 ? '' : 'none';
+    UI.otherTotal.textContent = `$${otherTotal.toFixed(2)}`;
 
     if (STATE.sales.length === 0) {
         UI.salesList.innerHTML = `
@@ -991,6 +1011,12 @@ function renderProductSummary() {
             <div class="summary-product-row">
                 <span>🔁 Other</span><span style="font-weight:700;">$${totalOther.toFixed(2)}</span>
             </div>
+            <div class="summary-product-row" style="border-top:1px solid var(--border); margin-top:4px; padding-top:8px;">
+                <span><strong>Takings</strong> <span style="color:var(--text-muted);">(Cash + PayID)</span></span><span style="font-weight:700; color:var(--gold);">$${(totalCash + totalPayID).toFixed(2)}</span>
+            </div>
+            <div class="summary-product-row">
+                <span>Total value <span style="color:var(--text-muted);">(incl. Other)</span></span><span style="font-weight:700;">$${totalRevenue.toFixed(2)}</span>
+            </div>
         </div>`;
 }
 
@@ -1097,7 +1123,8 @@ UI.exportBtn.addEventListener('click', async () => {
     rows.push(['Cash', totalCash.toFixed(2)].join(','));
     rows.push(['PayID', totalPayID.toFixed(2)].join(','));
     rows.push(['Other', totalOther.toFixed(2)].join(','));
-    rows.push(['Total', totalRevenue.toFixed(2)].join(','));
+    rows.push(['Takings (Cash + PayID)', (totalCash + totalPayID).toFixed(2)].join(','));
+    rows.push(['Total (incl. Other)', totalRevenue.toFixed(2)].join(','));
 
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0];
