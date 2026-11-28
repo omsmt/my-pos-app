@@ -50,6 +50,8 @@ const UI = {
     draftsSection: document.getElementById('draftsSection'),
     draftsList: document.getElementById('draftsList'),
     paymentOptions: document.querySelectorAll('.payment-option'),
+    paymentNote: document.getElementById('paymentNote'),
+    reviewPaymentNote: document.getElementById('reviewPaymentNote'),
     salesList: document.getElementById('salesList'),
     totalCount: document.getElementById('totalCount'),
     totalRevenue: document.getElementById('totalRevenue'),
@@ -117,6 +119,14 @@ const UI = {
 
 let selectedItem = null;
 let selectedPayment = null;
+
+const PAYMENT_LABELS = { cash: '💵 Cash', payid: '📱 PayID', other: '🔁 Other' };
+const PAYMENT_LABELS_PLAIN = { cash: 'Cash', payid: 'PayID', other: 'Other' };
+
+function paymentText(sale) {
+    const label = (PAYMENT_LABELS_PLAIN[sale.paymentMethod] || sale.paymentMethod).toUpperCase();
+    return sale.paymentNote ? `${label} (${sale.paymentNote})` : label;
+}
 let isManualMode = false;
 let showOosIndicators = localStorage.getItem('pos_oos') !== 'false';
 
@@ -550,6 +560,8 @@ function clearCart() {
     selectedPayment = null;
     UI.dealPrice.value = '';
     UI.paymentOptions.forEach(el => el.classList.remove('selected'));
+    UI.paymentNote.value = '';
+    UI.paymentNote.style.display = 'none';
     bundleTiersPrompted = {};
     bundleTiersApplied = {};
     saveCart();
@@ -686,6 +698,9 @@ UI.paymentOptions.forEach(opt => {
         UI.paymentOptions.forEach(el => el.classList.remove('selected'));
         opt.classList.add('selected');
         selectedPayment = opt.dataset.method;
+        const isOther = selectedPayment === 'other';
+        UI.paymentNote.style.display = isOther ? 'block' : 'none';
+        if (isOther) UI.paymentNote.focus();
         checkCheckoutReady();
     });
 });
@@ -719,8 +734,10 @@ UI.checkoutBtn.addEventListener('click', () => {
 
     UI.reviewTotal.textContent = `$${finalTotal.toFixed(2)}`;
 
-    const paymentLabels = { cash: '💵 Cash', payid: '📱 PayID' };
-    UI.reviewPaymentBadge.textContent = paymentLabels[selectedPayment] || selectedPayment;
+    UI.reviewPaymentBadge.textContent = PAYMENT_LABELS[selectedPayment] || selectedPayment;
+    const note = selectedPayment === 'other' ? UI.paymentNote.value.trim() : '';
+    UI.reviewPaymentNote.textContent = note ? `“${note}”` : '';
+    UI.reviewPaymentNote.style.display = note ? 'block' : 'none';
 
     UI.reviewModal.classList.add('active');
 });
@@ -756,6 +773,7 @@ function completeSale() {
         items: finalItems,
         total: finalTotal,
         paymentMethod: selectedPayment,
+        paymentNote: selectedPayment === 'other' ? UI.paymentNote.value.trim() : '',
         isDeal: isDeal
     };
 
@@ -799,7 +817,7 @@ function renderSales() {
                     <h4>#${sale.id} &bull; ${sale.items.length} item${sale.items.length !== 1 ? 's' : ''}</h4>
                     <div class="sale-meta">
                         ${new Date(sale.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        &bull; ${sale.paymentMethod.toUpperCase()}
+                        &bull; ${escapeHtml(paymentText(sale))}
                         ${sale.isDeal ? '&bull; DEAL' : ''}
                     </div>
                 </div>
@@ -817,10 +835,11 @@ function renderSales() {
                     </div>
                 `).join('')}
                 <div class="sale-pay-controls">
-                    <span style="font-size:12px; color:var(--text-muted);">Payment: <strong>${sale.paymentMethod.toUpperCase()}</strong></span>
+                    <span style="font-size:12px; color:var(--text-muted);">Payment: <strong>${escapeHtml(paymentText(sale))}</strong></span>
                     <div style="display:flex; gap:6px;">
                         <button class="btn btn-sm btn-ghost" style="font-size:11px;" onclick="updateSalePayment('${sale.id}', 'cash')">Cash</button>
                         <button class="btn btn-sm btn-ghost" style="font-size:11px;" onclick="updateSalePayment('${sale.id}', 'payid')">PayID</button>
+                        <button class="btn btn-sm btn-ghost" style="font-size:11px;" onclick="updateSalePayment('${sale.id}', 'other')">Other</button>
                     </div>
                 </div>
             </div>
@@ -843,9 +862,22 @@ window.deleteSale = async function (id) {
 
 window.updateSalePayment = async function (id, newMethod) {
     const sale = STATE.sales.find(s => s.id == id);
-    if (sale && sale.paymentMethod !== newMethod) {
+    if (!sale) return;
+    if (newMethod === 'other') {
+        // Prompt for a comment (also lets you edit an existing one)
+        const note = await customPrompt('Comment for this payment (e.g. Traded for a card):', sale.paymentNote || '', 'Other Payment');
+        if (note === null) return;
+        sale.paymentMethod = 'other';
+        sale.paymentNote = note.trim();
+        localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
+        renderSales();
+        showToast('Payment updated');
+        return;
+    }
+    if (sale.paymentMethod !== newMethod) {
         if (await customConfirm(`Change payment method to ${newMethod.toUpperCase()}?`)) {
             sale.paymentMethod = newMethod;
+            sale.paymentNote = '';
             localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
             renderSales();
             showToast('Payment updated');
@@ -889,10 +921,11 @@ function renderProductSummary() {
     }
 
     const productMap = {};
-    let totalCash = 0, totalPayID = 0;
+    let totalCash = 0, totalPayID = 0, totalOther = 0;
 
     STATE.sales.forEach(sale => {
         if (sale.paymentMethod === 'cash') totalCash += sale.total;
+        else if (sale.paymentMethod === 'other') totalOther += sale.total;
         else totalPayID += sale.total;
 
         sale.items.forEach(item => {
@@ -955,6 +988,9 @@ function renderProductSummary() {
             <div class="summary-product-row">
                 <span>📱 PayID</span><span style="font-weight:700;">$${totalPayID.toFixed(2)}</span>
             </div>
+            <div class="summary-product-row">
+                <span>🔁 Other</span><span style="font-weight:700;">$${totalOther.toFixed(2)}</span>
+            </div>
         </div>`;
 }
 
@@ -972,16 +1008,15 @@ UI.exportBtn.addEventListener('click', async () => {
             : str;
     }
 
-    const paymentLabel = { cash: 'Cash', payid: 'PayID' };
 
-    const headers = ['ID', 'Date', 'Time', 'SKU', 'Description', 'Category', 'Qty', 'Unit Price', 'List Total', 'Discount', 'Line Total', 'Tx Total', 'Payment', 'Is Deal'];
+    const headers = ['ID', 'Date', 'Time', 'SKU', 'Description', 'Category', 'Qty', 'Unit Price', 'List Total', 'Discount', 'Line Total', 'Tx Total', 'Payment', 'Payment Note', 'Is Deal'];
     const rows = [headers.join(',')];
 
     STATE.sales.forEach(sale => {
         const ts = new Date(sale.timestamp);
         const date = ts.toLocaleDateString('en-AU', { year: 'numeric', month: '2-digit', day: '2-digit' });
         const time = ts.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const payment = paymentLabel[sale.paymentMethod] || sale.paymentMethod;
+        const payment = PAYMENT_LABELS_PLAIN[sale.paymentMethod] || sale.paymentMethod;
 
         sale.items.forEach(item => {
             const listTotal = item.unitPrice * item.quantity;
@@ -1000,16 +1035,18 @@ UI.exportBtn.addEventListener('click', async () => {
                 item.actualPrice.toFixed(2),
                 sale.total.toFixed(2),
                 csvEscape(payment),
+                csvEscape(sale.paymentNote || ''),
                 sale.isDeal ? 'Yes' : 'No'
             ].join(','));
         });
     });
 
     const productMap = {};
-    let totalCash = 0, totalPayID = 0;
+    let totalCash = 0, totalPayID = 0, totalOther = 0;
 
     STATE.sales.forEach(sale => {
         if (sale.paymentMethod === 'cash') totalCash += sale.total;
+        else if (sale.paymentMethod === 'other') totalOther += sale.total;
         else totalPayID += sale.total;
 
         sale.items.forEach(item => {
@@ -1059,6 +1096,7 @@ UI.exportBtn.addEventListener('click', async () => {
     rows.push(['Method', 'Amount'].join(','));
     rows.push(['Cash', totalCash.toFixed(2)].join(','));
     rows.push(['PayID', totalPayID.toFixed(2)].join(','));
+    rows.push(['Other', totalOther.toFixed(2)].join(','));
     rows.push(['Total', totalRevenue.toFixed(2)].join(','));
 
     const now = new Date();

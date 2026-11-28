@@ -639,7 +639,7 @@ select {
 /* ── PAYMENT ──────────────────────────────────── */
 .payment-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     margin-bottom: 14px;
 }
@@ -662,6 +662,19 @@ select {
     background: rgba(124, 58, 237, 0.12);
     color: var(--primary-light);
     box-shadow: 0 0 0 1px var(--primary);
+}
+
+.payment-note {
+    width: 100%;
+    margin: -4px 0 14px;
+}
+
+.review-payment-note {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    word-break: break-word;
 }
 
 /* ── DEAL PRICE ───────────────────────────────── */
