@@ -169,7 +169,10 @@
             <div class="payment-grid">
                 <div class="payment-option" data-method="cash">💵 Cash</div>
                 <div class="payment-option" data-method="payid">📱 PayID</div>
+                <div class="payment-option" data-method="other">🔁 Other</div>
             </div>
+            <input type="text" id="paymentNote" class="payment-note" style="display:none;"
+                placeholder="Comment (e.g. Traded for a card)" maxlength="200">
         </div>
 
         <div id="zeroPriceWarning" class="zero-price-warning" style="display:none;">
@@ -248,6 +251,7 @@
             <span id="reviewTotal">$0.00</span>
         </div>
         <span class="review-payment-badge" id="reviewPaymentBadge">💵 Cash</span>
+        <div class="review-payment-note" id="reviewPaymentNote" style="display:none;"></div>
         <div class="modal-actions">
             <button class="btn btn-outline btn-sm" id="reviewCancelBtn">Back</button>
             <button class="btn btn-success btn-sm" id="reviewConfirmBtn">Confirm Sale</button>
