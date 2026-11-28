@@ -868,7 +868,7 @@ window.updateSalePayment = async function (id, newMethod) {
         const note = await customPrompt('Comment for this payment (e.g. Traded for a card):', sale.paymentNote || '', 'Other Payment');
         if (note === null) return;
         sale.paymentMethod = 'other';
-        sale.paymentNote = note.trim();
+        sale.paymentNote = note.trim().slice(0, 200); // match the checkout field's maxlength
         localStorage.setItem('pos_sales', JSON.stringify(STATE.sales));
         renderSales();
         showToast('Payment updated');
